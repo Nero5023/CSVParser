@@ -19,7 +19,8 @@ class SwiftCSVParserTests: XCTestCase {
         print(csv.underestimatedCount)
         print(line)
       }
-      
+      print("CSV 3th")
+      print(csv[5])
       
     }catch let error {
       print(error)
