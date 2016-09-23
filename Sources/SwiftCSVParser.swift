@@ -68,7 +68,7 @@ extension SwiftCSVParser: Collection {
   }
   
   subscript(idx: Index) -> [String] {
-    guard idx >= 0 && idx <= self.endIndex else { fatalError("Out of range") }
+    guard idx >= 0 && idx < self.endIndex else { fatalError("Out of range") }
     let regex = self.makeIterator().regexResults[idx]
     return (self.content as NSString).substring(with: regex.range ).word()
   }
