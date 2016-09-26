@@ -38,12 +38,22 @@ extension String {
 //    }.flatMap(String.init)
 //  }
   func word(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
+    let quote = "\""
+    var apperQuote = false
     return self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-      split.contains(UnicodeScalar(x)!)
+      if quote == String(UnicodeScalar(x)!) {
+        if !apperQuote {
+          apperQuote = true
+        }else {
+          apperQuote = false
+        }
+      }
+      if apperQuote {
+        return false
+      }else {
+        return split.contains(UnicodeScalar(x)!)
+      }
     }.flatMap(String.init)
-//    return self.utf16.split { x in
-//      split.contains(UnicodeScalar(x)!)
-//    }.flatMap(String.init)
   }
 }
 
