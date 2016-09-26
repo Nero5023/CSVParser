@@ -29,10 +29,16 @@ struct SwiftCSVParser {
 }
 
 extension String {
-  func word(spliBy split: CharacterSet = .alphanumerics) -> [String] {
+//  func word(spliBy split: CharacterSet = .alphanumerics) -> [String] {
+//    return self.utf16.split { x in
+//      // 这里强制 不太好
+//      !split.contains(UnicodeScalar(x)!)
+//    }.flatMap(String.init)
+//  }
+  func word(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
     return self.utf16.split { x in
-      // 这里强制 不太好
-      !split.contains(UnicodeScalar(x)!)
+//      UnicodeScalar(x)! == ","
+      split.contains(UnicodeScalar(x)!)
     }.flatMap(String.init)
   }
 }
