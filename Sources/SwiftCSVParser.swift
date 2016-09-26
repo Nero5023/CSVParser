@@ -3,8 +3,13 @@ import Foundation
 
 struct SwiftCSVParser {
   
-  var content: String
-  let regexResults: [NSTextCheckingResult]
+  var content: String {
+    didSet {
+      let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
+      regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
+    }
+  }
+  var regexResults: [NSTextCheckingResult]
   
   init(filePath: String) throws {
     content = try String(contentsOfFile: filePath)
