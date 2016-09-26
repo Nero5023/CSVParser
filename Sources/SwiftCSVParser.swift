@@ -10,16 +10,18 @@ struct SwiftCSVParser {
     }
   }
   var regexResults: [NSTextCheckingResult]
+  let delimiter: Character
   
-  init(filePath: String) throws {
+  init(filePath: String, delimiter: Character = ",") throws {
     content = try String(contentsOfFile: filePath)
+    self.delimiter = delimiter
     let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
     regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
   }
 
   
   func elements() -> [String] {
-    return content.word()
+    return content.word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
   }
   
   func wirite(toFilePath path: String) throws {
@@ -37,7 +39,6 @@ extension String {
 //  }
   func word(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
     return self.utf16.split { x in
-//      UnicodeScalar(x)! == ","
       split.contains(UnicodeScalar(x)!)
     }.flatMap(String.init)
   }
@@ -49,19 +50,20 @@ struct CSVParserIterator: IteratorProtocol {
   
   var rangesIterator: IndexingIterator<[NSRange]>
   let content: String
-  
-  init(regexResults: [NSTextCheckingResult], content: String) {
+  let delimiter: Character
+  init(regexResults: [NSTextCheckingResult], content: String, delimiter: Character) {
 //    self.content = content as NSString
 //    let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
 //    regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
 //    let ranges = regexResults.map { $0.range }
     self.content = content
+    self.delimiter = delimiter
     self.rangesIterator = regexResults.map { $0.range }.makeIterator()
   }
   
   
   public mutating func next() -> Array<String>? {
-    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word()
+    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
   }
   
   
@@ -69,7 +71,7 @@ struct CSVParserIterator: IteratorProtocol {
 
 extension SwiftCSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
-    return CSVParserIterator(regexResults: self.regexResults, content: self.content)
+    return CSVParserIterator(regexResults: self.regexResults, content: self.content, delimiter: self.delimiter)
   }
 }
 
@@ -88,7 +90,7 @@ extension SwiftCSVParser: Collection {
   subscript(idx: Index) -> [String] {
     get {
       let regex = self.regexResults[idx]
-      return (self.content as NSString).substring(with: regex.range).word()
+      return (self.content as NSString).substring(with: regex.range).word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
     }
     
     set (newValue) {
