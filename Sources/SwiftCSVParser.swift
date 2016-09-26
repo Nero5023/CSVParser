@@ -34,13 +34,16 @@ extension String {
 //  func word(spliBy split: CharacterSet = .alphanumerics) -> [String] {
 //    return self.utf16.split { x in
 //      // 这里强制 不太好
-//      !split.contains(UnicodeScalar(x)!)
+//      ! (UnicodeScalar(x)!)
 //    }.flatMap(String.init)
 //  }
   func word(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
-    return self.utf16.split { x in
+    return self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
       split.contains(UnicodeScalar(x)!)
     }.flatMap(String.init)
+//    return self.utf16.split { x in
+//      split.contains(UnicodeScalar(x)!)
+//    }.flatMap(String.init)
   }
 }
 
@@ -52,10 +55,6 @@ struct CSVParserIterator: IteratorProtocol {
   let content: String
   let delimiter: Character
   init(regexResults: [NSTextCheckingResult], content: String, delimiter: Character) {
-//    self.content = content as NSString
-//    let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
-//    regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
-//    let ranges = regexResults.map { $0.range }
     self.content = content
     self.delimiter = delimiter
     self.rangesIterator = regexResults.map { $0.range }.makeIterator()
@@ -98,7 +97,7 @@ extension SwiftCSVParser: Collection {
       let start = self.content.index(self.content.startIndex, offsetBy: nsrange.location)
       let end = self.content.index(start, offsetBy: nsrange.length)
       let range = start..<end
-      self.content.replaceSubrange(range, with: newValue.joined(separator: ","))
+      self.content.replaceSubrange(range, with: newValue.joined(separator: "\(self.delimiter)"))
     }
   }
 }
