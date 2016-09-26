@@ -3,7 +3,7 @@ import Foundation
 
 struct SwiftCSVParser {
   
-  let content: String
+  var content: String
   let regexResults: [NSTextCheckingResult]
   
   init(filePath: String) throws {
@@ -15,6 +15,10 @@ struct SwiftCSVParser {
   
   func elements() -> [String] {
     return content.word()
+  }
+  
+  func wirite(toFilePath path: String) throws {
+    try self.content.write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
   
 }
@@ -46,7 +50,7 @@ struct CSVParserIterator: IteratorProtocol {
   
   
   public mutating func next() -> Array<String>? {
-    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0) }?.word()
+    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word()
   }
   
   
@@ -61,18 +65,27 @@ extension SwiftCSVParser: Sequence {
 
 extension SwiftCSVParser: Collection {
   public typealias Index = Int
-  public var startIndex: Index { return 0 }
+  public var startIndex: Index { return self.regexResults.startIndex }
   public var endIndex: Index {
-    return self.regexResults.count
+    return self.regexResults.endIndex
   }
   
-  public func index(after i: Int) -> Int {
-    return i+1
+  public func index(after i: Index) -> Index {
+    return self.regexResults.index(after: i)
   }
   
   subscript(idx: Index) -> [String] {
-    guard idx >= 0 && idx < self.endIndex else { fatalError("Out of range") }
-    let regex = self.regexResults[idx]
-    return (self.content as NSString).substring(with: regex.range ).word()
+    get {
+      let regex = self.regexResults[idx]
+      return (self.content as NSString).substring(with: regex.range).word()
+    }
+    
+    set (newValue) {
+      let nsrange = self.regexResults[idx].range
+      let start = self.content.index(self.content.startIndex, offsetBy: nsrange.location)
+      let end = self.content.index(start, offsetBy: nsrange.length)
+      let range = start..<end
+      self.content.replaceSubrange(range, with: newValue.joined(separator: ","))
+    }
   }
 }
