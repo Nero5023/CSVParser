@@ -8,6 +8,7 @@ A swift package for read and write CSV file
 - [ ] get column
 - [ ] error
 - [ ] initialization from string
+
 ## Usage
 
 Initialization 
