@@ -152,8 +152,14 @@ extension SwiftCSVParser: Collection {
   
   subscript(idx: Index) -> [String] {
     get {
-      let regex = self.regexResults[idx]
-      return (self.content as NSString).substring(with: regex.range).word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
+      let result = self.enumerated().filter { (offset, _ ) -> Bool in
+        return offset == idx
+      }.first?.1
+      if let result = result {
+        return result
+      }else {
+        fatalError("Index: \(idx) out of range")
+      }
     }
     
     set (newValue) {
