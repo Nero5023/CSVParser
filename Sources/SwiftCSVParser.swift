@@ -28,33 +28,10 @@ struct SwiftCSVParser {
     try self.content.write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
   
+  
 }
 
 extension String {
-//  func word(spliBy split: CharacterSet = .alphanumerics) -> [String] {
-//    return self.utf16.split { x in
-//      // 这里强制 不太好
-//      ! (UnicodeScalar(x)!)
-//    }.flatMap(String.init)
-//  }
-//  func word(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
-//    let quote = "\""
-//    var apperQuote = false
-//    return self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-//      if quote == String(UnicodeScalar(x)!) {
-//        if !apperQuote {
-//          apperQuote = true
-//        }else {
-//          apperQuote = false
-//        }
-//      }
-//      if apperQuote {
-//        return false
-//      }else {
-//        return split.contains(UnicodeScalar(x)!)
-//      }
-//    }.flatMap(String.init)
-//  }
   
   func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n"), apperQuote: Bool = false) -> ([String], Bool) {
     let quote = "\""
@@ -75,6 +52,46 @@ extension String {
       }.flatMap(String.init)
     return (result, apperQuote)
   }
+  
+  func lines(splitBy split: CharacterSet = CharacterSet(charactersIn: "\r\n")) -> [String] {
+    let quote = "\""
+    var apperQuote = false
+    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
+      if quote == String(UnicodeScalar(x)!) {
+        if !apperQuote {
+          apperQuote = true
+        }else {
+          apperQuote = false
+        }
+      }
+      if apperQuote {
+        return false
+      }else {
+        return split.contains(UnicodeScalar(x)!)
+      }
+      }.flatMap(String.init)
+    return result
+  }
+//  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n"), apperQuote: Bool = false) -> ([String], Bool) {
+//    let quote = "\""
+//    var apperQuote = apperQuote
+//    let result = self.characters.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
+//      if quote == String(x) {
+//        if !apperQuote {
+//          apperQuote = true
+//        }else {
+//          apperQuote = false
+//        }
+//      }
+//      if apperQuote {
+//        return false
+//      }else {
+//        return split.contains(String(x).unicodeScalars.first!)
+//      }
+//      }.flatMap(String.init)
+//    return (result, apperQuote)
+//  }
+  
 }
 
 struct CSVParserIterator: IteratorProtocol {
