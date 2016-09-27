@@ -55,6 +55,26 @@ extension String {
       }
     }.flatMap(String.init)
   }
+  
+  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n"), apperQuote: Bool = false) -> ([String], Bool) {
+    let quote = "\""
+    var apperQuote = apperQuote
+    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
+      if quote == String(UnicodeScalar(x)!) {
+        if !apperQuote {
+          apperQuote = true
+        }else {
+          apperQuote = false
+        }
+      }
+      if apperQuote {
+        return false
+      }else {
+        return split.contains(UnicodeScalar(x)!)
+      }
+      }.flatMap(String.init)
+    return (result, apperQuote)
+  }
 }
 
 struct CSVParserIterator: IteratorProtocol {
@@ -71,8 +91,42 @@ struct CSVParserIterator: IteratorProtocol {
   }
   
   
-  public mutating func next() -> Array<String>? {
-    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
+//  public mutating func next() -> Array<String>? {
+//    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
+//  }
+  
+  public mutating func next() -> [String]? {
+    
+    func combine(_ words0: [String],_ words1: [String]) -> [String] {
+      if words0 == [] || words1 == [] {
+        return words0 + words1
+      }
+      let words0Last = words0.last!
+      let words1First = words1.first!
+      let wordsCombine = words0Last + "\r\n" + words1First
+      var result = Array(words0.dropLast())
+      result.append(wordsCombine)
+      result.append(contentsOf: words1.dropFirst())
+      return result
+    }
+    
+    func iter(words: [String], apperQuote: Bool) -> [String]? {
+      guard let range = self.rangesIterator.next() else {
+        if words == [] {
+          return nil
+        }else {
+          return words
+        }
+        
+      }
+      let (newWords, didApperQuote) = (content as NSString).substring(with: range).words(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"), apperQuote: apperQuote)
+      if didApperQuote {
+        return iter(words: combine(words, newWords), apperQuote: didApperQuote)
+      }else {
+        return combine(words, newWords)
+      }
+    }
+    return iter(words: [], apperQuote: false)
   }
   
   
