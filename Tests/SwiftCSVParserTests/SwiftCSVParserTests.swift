@@ -8,38 +8,33 @@ class SwiftCSVParserTests: XCTestCase {
     
 //    XCTAssertEqual(SwiftCSVParser().text, "Hello, World!")
     do {
-      let csv = try SwiftCSVParser(filePath: "/Users/Nero/Desktop/test.csv")
-      print(csv.content.word())
+      var csv = try SwiftCSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
+//      print(csv.content.word())
       let content = csv.content
+//      try csv.wirite(toFilePath: "/Users/Nero/Desktop/test2.csv")
       let index = content.characters.index(of: "\r")
       print(index)
-//      var iterator = CSVParserInter(content)
-//      print(iterator.next())
+//      csv[0] = ["id", "name", "helloworld"]
+      
       for line in csv {
-        print(csv.underestimatedCount)
         print(line)
       }
-      print("CSV 3th")
-      print(csv[5])
+      print(csv[4])
       
     }catch let error {
       print(error)
       
     }
-    
   }
 
   func testPerformance() {
     measure {
-      do {
-        let csv = try SwiftCSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-        for _ in csv {
-          
-        }
-      }catch let error {
-        print(error)
-        
+      var csv = try! SwiftCSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      for line in csv {
+//        print(line)
       }
+//      csv[0] = ["sid", "sname", "sage", "ajob"]
+//      try! csv.wirite(toFilePath: "/Users/Nero/Desktop/large2.csv")
     }
   }
   
