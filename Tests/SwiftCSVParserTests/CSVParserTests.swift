@@ -5,6 +5,12 @@ class CSVParserTests: XCTestCase {
   func testExample() {
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
+    let fileManager = FileManager.default
+    
+    // Get current directory path
+    
+    let path = fileManager.currentDirectoryPath
+    print(path)
     
     do {
       var csv = try CSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
@@ -31,10 +37,10 @@ class CSVParserTests: XCTestCase {
   func testPerformance() {
     measure {
       
-      var csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
 
-      for line in csv {
-
+      for _ in csv {
+        
       }
     }
     
