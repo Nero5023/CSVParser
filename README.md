@@ -5,6 +5,6 @@ A swift package for read and write CSV file
 
 - [ ] concurrent parse csv
 - [ ] improve performance
-- [ ] 
+- [ ] get column
 
 ## Usage
