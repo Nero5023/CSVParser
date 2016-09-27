@@ -1,7 +1,7 @@
 import Foundation
 
 
-struct SwiftCSVParser {
+struct CSVParser {
   
   var content: String
   
@@ -16,7 +16,7 @@ struct SwiftCSVParser {
 
   
   func wirite(toFilePath path: String) throws {
-    try self.content.write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
+    try self.lines.joined(separator: "\r\n").write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
 }
 
@@ -85,14 +85,14 @@ struct CSVParserIterator: IteratorProtocol {
   
 }
 
-extension SwiftCSVParser: Sequence {
+extension CSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
     return CSVParserIterator(lines: self.lines, delimiter: self.delimiter)
   }
 }
 
 
-extension SwiftCSVParser: Collection {
+extension CSVParser: Collection {
   public typealias Index = Int
   public var startIndex: Index { return self.lines.startIndex }
   public var endIndex: Index {
