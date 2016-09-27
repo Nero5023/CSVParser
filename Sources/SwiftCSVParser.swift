@@ -3,39 +3,28 @@ import Foundation
 
 struct SwiftCSVParser {
   
-  var content: String {
-    didSet {
-      let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
-      regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
-    }
-  }
-  var regexResults: [NSTextCheckingResult]
+  var content: String
+  
   let delimiter: Character
+  var lines: [String]
   
   init(filePath: String, delimiter: Character = ",") throws {
     content = try String(contentsOfFile: filePath)
     self.delimiter = delimiter
-    let regx = try! NSRegularExpression(pattern: "(.+)", options: .caseInsensitive)
-    regexResults = regx.matches(in: content, options: [], range: NSRange(location: 0, length: content.characters.count))
+    self.lines = content.lines()
   }
 
-  
-  func elements() -> [String] {
-    return content.words(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n")).0
-  }
   
   func wirite(toFilePath path: String) throws {
     try self.content.write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
-  
-  
 }
 
 extension String {
   
-  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n"), apperQuote: Bool = false) -> ([String], Bool) {
+  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
     let quote = "\""
-    var apperQuote = apperQuote
+    var apperQuote = false
     let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
       if quote == String(UnicodeScalar(x)!) {
         if !apperQuote {
@@ -46,11 +35,11 @@ extension String {
       }
       if apperQuote {
         return false
-      }else {
+      }else { 
         return split.contains(UnicodeScalar(x)!)
       }
       }.flatMap(String.init)
-    return (result, apperQuote)
+    return result
   }
   
   func lines(splitBy split: CharacterSet = CharacterSet(charactersIn: "\r\n")) -> [String] {
@@ -72,25 +61,6 @@ extension String {
       }.flatMap(String.init)
     return result
   }
-//  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n"), apperQuote: Bool = false) -> ([String], Bool) {
-//    let quote = "\""
-//    var apperQuote = apperQuote
-//    let result = self.characters.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-//      if quote == String(x) {
-//        if !apperQuote {
-//          apperQuote = true
-//        }else {
-//          apperQuote = false
-//        }
-//      }
-//      if apperQuote {
-//        return false
-//      }else {
-//        return split.contains(String(x).unicodeScalars.first!)
-//      }
-//      }.flatMap(String.init)
-//    return (result, apperQuote)
-//  }
   
 }
 
@@ -98,93 +68,48 @@ struct CSVParserIterator: IteratorProtocol {
   
   typealias Element = [String]
   
-  var rangesIterator: IndexingIterator<[NSRange]>
-  let content: String
   let delimiter: Character
-  init(regexResults: [NSTextCheckingResult], content: String, delimiter: Character) {
-    self.content = content
+  let lines: [String]
+  var linesIterator: IndexingIterator<[String]>
+  
+  init(lines: [String], delimiter: Character) {
+    self.lines = lines
     self.delimiter = delimiter
-    self.rangesIterator = regexResults.map { $0.range }.makeIterator()
+    self.linesIterator = self.lines.makeIterator()
   }
   
-  
-//  public mutating func next() -> Array<String>? {
-//    return self.rangesIterator.next().flatMap{ (content as NSString).substring(with: $0)}?.word(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"))
-//  }
   
   public mutating func next() -> [String]? {
-    
-    func combine(_ words0: [String],_ words1: [String]) -> [String] {
-      if words0 == [] || words1 == [] {
-        return words0 + words1
-      }
-      let words0Last = words0.last!
-      let words1First = words1.first!
-      let wordsCombine = words0Last + "\r\n" + words1First
-      var result = Array(words0.dropLast())
-      result.append(wordsCombine)
-      result.append(contentsOf: words1.dropFirst())
-      return result
-    }
-    
-    func iter(words: [String], apperQuote: Bool) -> [String]? {
-      guard let range = self.rangesIterator.next() else {
-        if words == [] {
-          return nil
-        }else {
-          return words
-        }
-        
-      }
-      let (newWords, didApperQuote) = (content as NSString).substring(with: range).words(splitBy: CharacterSet(charactersIn:  "\(delimiter)\r\n"), apperQuote: apperQuote)
-      if didApperQuote {
-        return iter(words: combine(words, newWords), apperQuote: didApperQuote)
-      }else {
-        return combine(words, newWords)
-      }
-    }
-    return iter(words: [], apperQuote: false)
+    return self.linesIterator.next().map{ $0.words() }
   }
-  
   
 }
 
 extension SwiftCSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
-    return CSVParserIterator(regexResults: self.regexResults, content: self.content, delimiter: self.delimiter)
+    return CSVParserIterator(lines: self.lines, delimiter: self.delimiter)
   }
 }
 
 
 extension SwiftCSVParser: Collection {
   public typealias Index = Int
-  public var startIndex: Index { return self.regexResults.startIndex }
+  public var startIndex: Index { return self.lines.startIndex }
   public var endIndex: Index {
-    return self.regexResults.endIndex
+    return self.lines.endIndex
   }
   
   public func index(after i: Index) -> Index {
-    return self.regexResults.index(after: i)
+    return self.lines.index(after: i)
   }
   
   subscript(idx: Index) -> [String] {
     get {
-      let result = self.enumerated().filter { (offset, _ ) -> Bool in
-        return offset == idx
-      }.first?.1
-      if let result = result {
-        return result
-      }else {
-        fatalError("Index: \(idx) out of range")
-      }
+      return self.lines[idx].words()
     }
     
     set (newValue) {
-      let nsrange = self.regexResults[idx].range
-      let start = self.content.index(self.content.startIndex, offsetBy: nsrange.location)
-      let end = self.content.index(start, offsetBy: nsrange.length)
-      let range = start..<end
-      self.content.replaceSubrange(range, with: newValue.joined(separator: "\(self.delimiter)"))
+      self.lines[idx] = newValue.joined(separator: String(self.delimiter))
     }
   }
 }
