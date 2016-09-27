@@ -1,6 +1,6 @@
 import XCTest
-@testable import SwiftCSVParserTests
+@testable import CSVParserTests
 
 XCTMain([
-     testCase(SwiftCSVParserTests.allTests),
+     testCase(CSVParserTests.allTests),
 ])
