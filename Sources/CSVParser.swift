@@ -1,19 +1,25 @@
 import Foundation
 
 
-struct CSVParser {
+class CSVParser {
   
   var content: String
   
   let delimiter: Character
   var lines: [String]
   
-  init(filePath: String, delimiter: Character = ",") throws {
-    content = try String(contentsOfFile: filePath)
+  
+  init(content: String, delimiter: Character = ",") {
+    self.content = content
     self.delimiter = delimiter
     self.lines = content.lines()
   }
 
+  convenience init(filePath: String, delimiter: Character = ",") throws {
+    let fileContent = try String(contentsOfFile: filePath)
+    self.init(content: fileContent, delimiter: delimiter)
+    
+  }
   
   func wirite(toFilePath path: String) throws {
     try self.lines.joined(separator: "\r\n").write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
