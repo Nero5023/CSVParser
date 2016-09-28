@@ -28,6 +28,7 @@ class CSVParser {
   func concurrencyParse(handler:  @escaping ()->()) {
     let wordsInOneTime = 100
     let parseGroup = DispatchGroup()
+    // writeRowQueue is a serial queue not concurrent
     let writeRowQueue = DispatchQueue(label: "com.nero.writerow")
     writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
     for i in 0...self.lines.count / wordsInOneTime {
