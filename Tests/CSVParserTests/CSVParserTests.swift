@@ -33,18 +33,44 @@ class CSVParserTests: XCTestCase {
       
     }
   }
-
-  func testPerformance() {
+  
+//  func testConcurrentPerformance() {
+//    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+//    measure {
+//      csv.concurrencyParse {
+//        print("done")
+//      }
+//    }
+//    
+//  }
+//  
+  func testParsePerformance() {
     measure {
-      
+    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      csv.parse()
+    }
+  }
+  func testConcurrencyPerformance() {
+    measure {
       let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-
-      for _ in csv {
+      csv.concurrencyParse {
         
       }
     }
-    
   }
+  
+  func testConcurrencyWrite() {
+    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+    csv.concurrencyParse {
+      csv.rows.forEach({ x in
+        if x.count != 4 {
+          XCTAssertEqual("1", "12")
+        }
+      })
+      print("done")
+    }
+  }
+  
 
   
   static var allTests : [(String, (CSVParserTests) -> () throws -> Void)] {

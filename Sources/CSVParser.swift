@@ -26,7 +26,7 @@ class CSVParser {
   }
   
   func concurrencyParse(handler:  @escaping ()->()) {
-    let wordsInOneTime = 200
+    let wordsInOneTime = 100
     let parseGroup = DispatchGroup()
     let writeRowQueue = DispatchQueue(label: "com.nero.writerow")
     writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
@@ -42,7 +42,6 @@ class CSVParser {
             self.rows[index] = parsedLine
           }
         }
-        print("\(i) done")
       })
       DispatchQueue.global(qos: .userInitiated).async(group: parseGroup, execute: workItem)
 
