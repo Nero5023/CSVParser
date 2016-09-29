@@ -73,11 +73,7 @@ extension String {
     var apperQuote = false
     let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
       if quote == String(UnicodeScalar(x)!) {
-        if !apperQuote {
-          apperQuote = true
-        }else {
-          apperQuote = false
-        }
+        apperQuote = !apperQuote
       }
       if apperQuote {
         return false
@@ -96,11 +92,7 @@ extension String {
     var apperQuote = false
     let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
       if quote == String(UnicodeScalar(x)!) {
-        if !apperQuote {
-          apperQuote = true
-        }else {
-          apperQuote = false
-        }
+        apperQuote = !apperQuote
       }
       if apperQuote {
         return false
