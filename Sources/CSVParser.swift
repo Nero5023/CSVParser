@@ -2,11 +2,15 @@ import Foundation
 
 class CSVParser {
   
-  var content: String
   
   let delimiter: Character
   var lines: [String]
   var rows: [[String]]
+  
+  // config
+  var content: String
+  let lineSeparator = "\r\n"
+  
   var headers: [String] {
     get {
       return self.lines.first?.words() ?? []
@@ -20,6 +24,7 @@ class CSVParser {
 
     self.rows = []
     self.rows = Array<[String]>.init(repeating: [String].init(repeating: "", count: self.headers.count), count: self.lines.count)
+    self.parse()
   }
 
   convenience init(filePath: String, delimiter: Character = ",") throws {
