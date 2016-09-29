@@ -68,7 +68,7 @@ class CSVParser {
 
 extension String {
   
-  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
+  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",")) -> [String] {
     let quote = "\""
     var apperQuote = false
     let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
@@ -126,7 +126,8 @@ struct CSVParserIterator: IteratorProtocol {
   
   
   public mutating func next() -> [String]? {
-    return self.linesIterator.next().map{ $0.words() }
+    let characterSet = CharacterSet(charactersIn: String(delimiter))
+    return self.linesIterator.next().map{ $0.words(splitBy: characterSet) }
   }
   
 }
