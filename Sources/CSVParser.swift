@@ -7,6 +7,11 @@ class CSVParser {
   let delimiter: Character
   var lines: [String]
   var rows: [[String]]
+  var headers: [String] {
+    get {
+      return self.lines.first?.words() ?? []
+    }
+  }
   
   init(content: String, delimiter: Character = ",") {
     self.content = content
