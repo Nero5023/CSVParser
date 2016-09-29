@@ -68,7 +68,7 @@ class CSVParser {
 
 extension String {
   
-  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",")) -> [String] {
+  func words(splitBy split: Character = ",") -> [String] {
     let quote = "\""
     var apperQuote = false
     let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
@@ -81,11 +81,14 @@ extension String {
       }
       if apperQuote {
         return false
-      }else { 
-        return split.contains(UnicodeScalar(x)!)
+      }else {
+        return Character(UnicodeScalar(x)!) == split
       }
       }.flatMap(String.init)
     return result
+    //    return self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
+    //      return split.contains(UnicodeScalar(x)!)
+    //    }.flatMap(String.init)
   }
   
   func lines(splitBy split: CharacterSet = CharacterSet(charactersIn: "\r\n")) -> [String] {
@@ -126,8 +129,7 @@ struct CSVParserIterator: IteratorProtocol {
   
   
   public mutating func next() -> [String]? {
-    let characterSet = CharacterSet(charactersIn: String(delimiter))
-    return self.linesIterator.next().map{ $0.words(splitBy: characterSet) }
+    return self.linesIterator.next().map{ $0.words(splitBy: delimiter) }
   }
   
 }
