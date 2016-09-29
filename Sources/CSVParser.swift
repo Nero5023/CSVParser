@@ -3,13 +3,13 @@ import Foundation
 class CSVParser {
   
   
-  let delimiter: Character
+  var content: String
   var lines: [String]
   var rows: [[String]]
   
   // config
-  var content: String
-  let lineSeparator = "\r\n"
+  let delimiter: Character
+  let lineSeparator: Character = "\r\n"
   
   var headers: [String] {
     get {
