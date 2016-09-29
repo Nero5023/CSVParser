@@ -17,8 +17,9 @@ class CSVParser {
     self.content = content
     self.delimiter = delimiter
     self.lines = content.lines()
-    // 3?
-    self.rows = Array<[String]>.init(repeating: [String].init(repeating: "", count: 3), count: self.lines.count)
+
+    self.rows = []
+    self.rows = Array<[String]>.init(repeating: [String].init(repeating: "", count: self.headers.count), count: self.lines.count)
   }
 
   convenience init(filePath: String, delimiter: Character = ",") throws {
@@ -30,11 +31,21 @@ class CSVParser {
     try self.lines.joined(separator: "\r\n").write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
   
+  func enumeratedWithDic() -> [[String: String]] {
+    return self.lines.dropFirst().map {
+      var dic = [String: String]()
+      for (index, word) in $0.words(splitBy: self.delimiter).enumerated() {
+        dic[self.headers[index]] = word
+      }
+      return dic
+    }
+  }
+  
   func concurrencyParse(handler:  @escaping ()->()) {
     let wordsInOneTime = 100
     let parseGroup = DispatchGroup()
     // writeRowQueue is a serial queue not concurrent
-    let writeRowQueue = DispatchQueue(label: "com.nero.writerow")
+    let writeRowQueue = DispatchQueue(label: "com.csvparser.write", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
     for i in 0...self.lines.count / wordsInOneTime {
       let workItem = DispatchWorkItem(block: {
@@ -151,6 +162,19 @@ extension CSVParser: Collection {
     
     set (newValue) {
       self.lines[idx] = newValue.joined(separator: String(self.delimiter))
+    }
+  }
+}
+
+extension CSVParser {
+  subscript(key: String) -> [String]? {
+    guard let index = self.headers.index(of: key) else {
+      return nil
+    }
+    // may be wrong here
+    // must parse first
+    return self.rows.dropFirst().map {
+      $0[index]
     }
   }
 }
