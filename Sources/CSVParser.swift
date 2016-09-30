@@ -9,7 +9,7 @@ class CSVParser {
   
   // config
   let delimiter: Character
-  let lineSeparator: Character = "\r\n"
+  let lineSeparator: Character = "\n"
   
   var headers: [String] {
     get {

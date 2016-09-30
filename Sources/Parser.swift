@@ -34,6 +34,7 @@ extension String {
       }.flatMap(String.init)
     }
   }
+  
 }
 
 extension CSVParser {
@@ -51,6 +52,7 @@ extension CSVParser {
     var row = [String]()
     while true {
       // need to pares with quotes
+
       if inputContents[cursor] == quotes {
         var nextQuote = cursor
         cursor = inputContents.index(after: cursor)
@@ -99,6 +101,29 @@ extension CSVParser {
       }
       
       //TODO: Next delimiter comes before next newline
+      if let nextDelim = nextDelimiter {
+        if let nextLine = nextLine , nextDelim >= nextLine   {
+          //pass
+        }else {
+          row.append(self.content.substring(with: cursor..<nextDelim))
+          cursor = inputContents.index(nextDelim, offsetBy: 1)
+          nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
+          continue
+        }
+      }
+      
+      // end of row
+      if let nextNewLine = nextLine {
+        row.append(self.content.substring(with: cursor..<nextNewLine))
+        self.rows.append(row)
+        row.removeAll(keepingCapacity: true)
+        cursor = inputContents.index(nextNewLine, offsetBy: 1)
+        
+        nextLine = inputContents.suffix(from: cursor).index(of: self.lineSeparator)
+        
+        continue
+      }
+      break
     }
   
   }
