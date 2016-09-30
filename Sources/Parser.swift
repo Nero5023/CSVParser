@@ -35,6 +35,11 @@ extension String {
     }
   }
   
+  func index(of char: Character, after: String.Index) -> String.Index? {
+    // don't know
+    return range(of: String(char), options: .literal, range: self.index(after: after)..<self.endIndex, locale: nil)?.lowerBound
+  }
+  
 }
 
 extension CSVParser {
@@ -52,12 +57,12 @@ extension CSVParser {
     var row = [String]()
     while true {
       // need to pares with quotes
-
+  
       if inputContents[cursor] == quotes {
         var nextQuote = cursor
         cursor = inputContents.index(after: cursor)
         while true {
-          if let nextQ = inputContents.suffix(from: inputContents.index(after: nextQuote)).index(of: quotes) {
+          if let nextQ = self.content.index(of: quotes, after: nextQuote) {
             nextQuote = nextQ
             
             // end of file
@@ -79,25 +84,29 @@ extension CSVParser {
               cursor = inputContents.index(nextQuote, offsetBy: 1 + 1)
               // need to be the cursor next index
               
-              nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
-              nextLine = inputContents.suffix(from: cursor).index(of: self.lineSeparator)
+              nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
+              nextLine = self.content.index(of: self.lineSeparator, after: cursor)
               break
             }
             
+            // come accross nextline
             if inputContents[inputContents.index(after: nextQuote)] == self.lineSeparator {
               row.append(self.content.substring(with: cursor..<nextQuote))
               self.rows.append(row)
               row.removeAll(keepingCapacity: true)
-              nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
-              nextLine = inputContents.suffix(from: cursor).index(of: self.lineSeparator)
+//              nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
+              cursor = inputContents.index(nextQuote, offsetBy: 1 + 1)
+              nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
+              nextLine = self.content.index(of: self.lineSeparator, after: cursor)
               break
             }
-            continue
+            
           }else {
             // TODO: raise error
             fatalError("No matched quotes")
           }
         }
+        continue
       }
       
       //TODO: Next delimiter comes before next newline
@@ -107,9 +116,20 @@ extension CSVParser {
         }else {
           row.append(self.content.substring(with: cursor..<nextDelim))
           cursor = inputContents.index(nextDelim, offsetBy: 1)
-          nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
+          nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
           continue
         }
+//        if nextLine == nil {
+//          row.append(self.content.substring(with: cursor..<nextDelim))
+//          cursor = inputContents.index(nextDelim, offsetBy: 1)
+//          nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
+//          continue
+//        }else if nextDelim < nextLine!{
+//          row.append(self.content.substring(with: cursor..<nextDelim))
+//          cursor = inputContents.index(nextDelim, offsetBy: 1)
+//          nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
+//          continue
+//        }
       }
       
       // end of row
@@ -119,10 +139,19 @@ extension CSVParser {
         row.removeAll(keepingCapacity: true)
         cursor = inputContents.index(nextNewLine, offsetBy: 1)
         
-        nextLine = inputContents.suffix(from: cursor).index(of: self.lineSeparator)
+        nextLine = self.content.index(of: self.lineSeparator, after: cursor)
         
         continue
       }
+      
+      if cursor != inputContents.endIndex && nextDelimiter == nil && nextLine == nil {
+        row.append(self.content.substring(with: cursor..<self.content.endIndex))
+        self.rows.append(row)
+        row.removeAll(keepingCapacity: true)
+        cursor = self.content.endIndex
+        
+      }
+      
       break
     }
   
