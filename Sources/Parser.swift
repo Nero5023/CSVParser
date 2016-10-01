@@ -36,8 +36,6 @@ extension String {
   }
   
   func index(of char: Character, after: String.Index) -> String.Index? {
-    // don't know
-//    return range(of: String(char), options: .literal, range: self.index(after: after)..<self.endIndex, locale: nil)?.lowerBound
     return range(of: String(char), options: .literal, range: after..<self.endIndex, locale: nil)?.lowerBound
   }
   

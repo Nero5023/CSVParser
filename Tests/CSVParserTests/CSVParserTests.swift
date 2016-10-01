@@ -31,7 +31,7 @@ class CSVParserTests: XCTestCase {
       print(csv1[4])
       
       
-      let csv2 = try CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      let csv2 = try CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
       
       
       for line in csv2 {
@@ -56,30 +56,31 @@ class CSVParserTests: XCTestCase {
 //    
 //  }
 //  
-  func testParsePerformance() {
-    measure {
-    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-      
-    }
-  }
-  func testConcurrencyPerformance() {
-    measure {
-      let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
-     
-    }
-  }
-  
-  func testConcurrencyWrite() {
-    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
-//    csv.concurrencyParse {
-//      csv.rows.forEach({ x in
-//        if x.count != 4 {
-//          XCTAssertEqual("1", "12")
-//        }
-//      })
-//      print("done")
+//  func testParsePerformance() {
+//    measure {
+//    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
 //    }
-  }
+//  }
+//  func testConcurrencyPerformance() {
+//    measure {
+//      let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
+//     
+//    }
+//  }
+//  
+//  func testConcurrencyWrite() {
+//     let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+//    measure {
+//      let string = csv.content
+//      string.characters
+//    }
+//  }
+//  func testConcurrencyWrite2() {
+//    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+//    measure {
+//      let string = csv.content
+//    }
+//  }
   
 
   

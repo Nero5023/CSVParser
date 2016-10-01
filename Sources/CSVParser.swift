@@ -46,7 +46,8 @@ class CSVParser {
   
   private func parse() {
     if let _ = self.content.range(of: String(self.quotes)) {
-      self.parseWithQuotes()
+//      self.parseWithQuotes()
+      self.newParse()
     }else {
       self.parserNoQuote()
     }
