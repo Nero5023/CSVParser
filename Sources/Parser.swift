@@ -25,11 +25,11 @@ extension String {
   
   // from string to object data
   func nzSplitElements(lineSeparator: Character, delimiter: Character) -> [[String]] {
-    let rowString =  self.utf16.split {
+    let rowString =  self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
       Character(UnicodeScalar($0)!) == lineSeparator
     }
     return rowString.map {
-      $0.split {
+      $0.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
         Character(UnicodeScalar($0)!) == delimiter
       }.flatMap(String.init)
     }
@@ -49,7 +49,6 @@ extension CSVParser {
   }
   
   func parseWithQuotes() {
-    let quotes: Character = "\""
     let inputContents = content.characters
     var cursor = inputContents.startIndex
     var nextDelimiter = inputContents.index(of: self.delimiter)
@@ -119,17 +118,6 @@ extension CSVParser {
           nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
           continue
         }
-//        if nextLine == nil {
-//          row.append(self.content.substring(with: cursor..<nextDelim))
-//          cursor = inputContents.index(nextDelim, offsetBy: 1)
-//          nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
-//          continue
-//        }else if nextDelim < nextLine!{
-//          row.append(self.content.substring(with: cursor..<nextDelim))
-//          cursor = inputContents.index(nextDelim, offsetBy: 1)
-//          nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
-//          continue
-//        }
       }
       
       // end of row

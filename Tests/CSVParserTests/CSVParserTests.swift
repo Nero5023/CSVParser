@@ -13,20 +13,33 @@ class CSVParserTests: XCTestCase {
     print(path)
     
     do {
-      var csv = try CSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
-
-      let content = csv.content
-      let index = content.characters.index(of: "\r")
-      print(index)
+      let csv = try CSVParser(filePath: "/Users/Nero/Desktop/empty_fields.csv")
 
       
       for line in csv {
         print(line)
       }
-      for line in csv.content.lines() {
+
+      print(csv[4])
+      
+      let csv1 = try CSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
+      
+      
+      for line in csv1 {
         print(line)
       }
-      print(csv[4])
+      
+      print(csv1[4])
+      
+      
+      let csv2 = try CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      
+      
+      for line in csv2 {
+        print(line)
+      }
+      
+      print(csv2[4])
       
     }catch let error {
       print(error)
@@ -47,28 +60,26 @@ class CSVParserTests: XCTestCase {
   func testParsePerformance() {
     measure {
     let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-      csv.parse()
+      
     }
   }
   func testConcurrencyPerformance() {
     measure {
       let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-      csv.concurrencyParse {
-        
-      }
+     
     }
   }
   
   func testConcurrencyWrite() {
     let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-    csv.concurrencyParse {
-      csv.rows.forEach({ x in
-        if x.count != 4 {
-          XCTAssertEqual("1", "12")
-        }
-      })
-      print("done")
-    }
+//    csv.concurrencyParse {
+//      csv.rows.forEach({ x in
+//        if x.count != 4 {
+//          XCTAssertEqual("1", "12")
+//        }
+//      })
+//      print("done")
+//    }
   }
   
 
