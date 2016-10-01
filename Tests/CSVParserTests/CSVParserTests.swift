@@ -20,7 +20,6 @@ class CSVParserTests: XCTestCase {
         print(line)
       }
 
-      print(csv[4])
       
       let csv1 = try CSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
       
@@ -65,13 +64,13 @@ class CSVParserTests: XCTestCase {
   }
   func testConcurrencyPerformance() {
     measure {
-      let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
      
     }
   }
   
   func testConcurrencyWrite() {
-    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+    let csv = try! CSVParser(filePath: "/Users/Nero/Desktop/large2.csv")
 //    csv.concurrencyParse {
 //      csv.rows.forEach({ x in
 //        if x.count != 4 {

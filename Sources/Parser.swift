@@ -37,7 +37,8 @@ extension String {
   
   func index(of char: Character, after: String.Index) -> String.Index? {
     // don't know
-    return range(of: String(char), options: .literal, range: self.index(after: after)..<self.endIndex, locale: nil)?.lowerBound
+//    return range(of: String(char), options: .literal, range: self.index(after: after)..<self.endIndex, locale: nil)?.lowerBound
+    return range(of: String(char), options: .literal, range: after..<self.endIndex, locale: nil)?.lowerBound
   }
   
 }
@@ -50,6 +51,7 @@ extension CSVParser {
   
   func parseWithQuotes() {
     let inputContents = content.characters
+
     var cursor = inputContents.startIndex
     var nextDelimiter = inputContents.index(of: self.delimiter)
     var nextLine = inputContents.index(of: self.lineSeparator)
@@ -61,7 +63,7 @@ extension CSVParser {
         var nextQuote = cursor
         cursor = inputContents.index(after: cursor)
         while true {
-          if let nextQ = self.content.index(of: quotes, after: nextQuote) {
+          if let nextQ = self.content.index(of: quotes, after: inputContents.index(after: nextQuote) ) {
             nextQuote = nextQ
             
             // end of file
@@ -108,7 +110,9 @@ extension CSVParser {
         continue
       }
       
-      //TODO: Next delimiter comes before next newline
+      //
+      
+      //Next delimiter comes before next newline
       if let nextDelim = nextDelimiter {
         if let nextLine = nextLine , nextDelim >= nextLine   {
           //pass
@@ -132,6 +136,7 @@ extension CSVParser {
         continue
       }
       
+      // the last element
       if cursor != inputContents.endIndex && nextDelimiter == nil && nextLine == nil {
         row.append(self.content.substring(with: cursor..<self.content.endIndex))
         self.rows.append(row)
