@@ -46,12 +46,24 @@ class CSVParser {
   
   private func parse() {
     if let _ = self.content.range(of: String(self.quotes)) {
-//      self.parseWithQuotes()
-      self.newParse()
+      self.parseWithQuotes()
+//      self.newParse()
     }else {
       self.parserNoQuote()
     }
   }
+  
+  private func functionalParse() {
+    if let _ = self.content.range(of: String(self.quotes)) {
+      let startIndex = self.content.characters.startIndex
+      let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
+      let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
+      self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content)
+    }else {
+      self.parserNoQuote()
+    }
+  }
+  
   
 //  func concurrencyParse(handler:  @escaping ()->()) {
 //    let wordsInOneTime = 100
@@ -118,8 +130,38 @@ extension String {
     return result
   }
   
+  func parseCSV(delimiter: Character, lineSeparator: Character, quote: Character) -> [[String]] {
+    var appearQuote = false
+    let splitedLines = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
+      let char = Character(UnicodeScalar($0)!)
+      if char == quote {
+        appearQuote = !appearQuote
+      }
+      if appearQuote {
+        return false
+      }else {
+        return char == lineSeparator
+      }
+    }
+    appearQuote = false
+    return splitedLines.map { line in
+      line.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
+        let char = Character(UnicodeScalar($0)!)
+        if char == quote {
+          appearQuote = !appearQuote
+        }
+        if appearQuote {
+          return false
+        }else {
+          return char == delimiter
+        }
+      }.flatMap(String.init)
+    }
+  }
+  
 }
 
+// Make a CSVParserIterator
 struct CSVParserIterator: IteratorProtocol {
   
   typealias Element = [String]
@@ -137,6 +179,7 @@ struct CSVParserIterator: IteratorProtocol {
   
 }
 
+// Comfirm to Sequence protocol
 extension CSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
     return CSVParserIterator(rows: self.rows)
@@ -144,6 +187,7 @@ extension CSVParser: Sequence {
 }
 
 
+// Comfirm to Collection protocol
 extension CSVParser: Collection {
   public typealias Index = Int
   public var startIndex: Index { return self.rows.startIndex }
@@ -167,6 +211,7 @@ extension CSVParser: Collection {
 }
 
 extension CSVParser {
+  // string subscript
   subscript(key: String) -> [String]? {
     guard let index = self.headers.index(of: key) else {
       return nil
@@ -174,7 +219,12 @@ extension CSVParser {
     // may be wrong here
     // must parse first
     return self.rows.dropFirst().map {
-      $0[index]
+      // make sure every column
+      if index >= $0.count {
+        return ""
+      }else {
+        return $0[index]
+      }
     }
   }
 }
