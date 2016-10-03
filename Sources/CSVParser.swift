@@ -8,7 +8,7 @@ class CSVParser {
   
   // config
   let delimiter: Character
-  let lineSeparator: Character = "\n"
+  let lineSeparator: Character
   let quotes: Character = "\""
   
   var headers: [String] {
@@ -17,17 +17,18 @@ class CSVParser {
     }
   }
   
-  init(content: String, delimiter: Character = ",") {
+  init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") {
     self.content = content
     self.delimiter = delimiter
+    self.lineSeparator = lineSeparator
     self.rows = []
-
+    
     self.parse()
   }
 
-  convenience init(filePath: String, delimiter: Character = ",") throws {
+  convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     let fileContent = try String(contentsOfFile: filePath)
-    self.init(content: fileContent, delimiter: delimiter)
+    self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
   }
   
   func wirite(toFilePath path: String) throws {
@@ -47,7 +48,6 @@ class CSVParser {
   private func parse() {
     if let _ = self.content.range(of: String(self.quotes)) {
       self.parseWithQuotes()
-//      self.newParse()
     }else {
       self.parserNoQuote()
     }
