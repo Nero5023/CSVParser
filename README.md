@@ -72,7 +72,7 @@ do {
 
 ```swift
 // get row by int subscript 
-    csv[10] // the No.10 row
+csv[10] // the No.10 row
     
 // get column by string subscript
 csv["id"] // column with header key "id" 
@@ -83,7 +83,7 @@ csv["id"] // column with header key "id"
 
 ```swift
 for dic in csv.enumeratedWithDic() {
-	print(dic) // dic is [String: String]
+	print(dic) // dic is [String: String]	
 }
 
 ```
