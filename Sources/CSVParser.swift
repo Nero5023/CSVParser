@@ -1,115 +1,139 @@
 import Foundation
 
-
-struct CSVParser {
+public class CSVParser {
+  
   
   var content: String
+  var rows: [[String]]
   
+  // config
   let delimiter: Character
-  var lines: [String]
+  let lineSeparator: Character
+  let quotes: Character = "\""
   
-  init(filePath: String, delimiter: Character = ",") throws {
-    content = try String(contentsOfFile: filePath)
+  var headers: [String] {
+    get {
+      return self.rows.first ?? []
+    }
+  }
+  
+  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") {
+    self.content = content
     self.delimiter = delimiter
-    self.lines = content.lines()
+    self.lineSeparator = lineSeparator
+    self.rows = []
+    
+    self.parse()
   }
 
+  public convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
+    let fileContent = try String(contentsOfFile: filePath)
+    self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
+  }
   
-  func wirite(toFilePath path: String) throws {
-    try self.lines.joined(separator: "\r\n").write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
+  public func wirite(toFilePath path: String) throws {
+    try self.rows.map{ $0.joined(separator: String(self.delimiter)) }.joined(separator: String(self.lineSeparator)).write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
+  }
+  
+  public func enumeratedWithDic() -> [[String: String]] {
+    return self.rows.dropFirst().map {
+      var dic = [String: String]()
+      for (index, word) in $0.enumerated() {
+        dic[self.headers[index]] = word
+      }
+      return dic
+    }
+  }
+  
+  private func parse() {
+    if let _ = self.content.range(of: String(self.quotes)) {
+      // if the file contains quote '"'
+      self.parseWithQuotes()
+    }else {
+      // if the file not contain quote
+      self.parserNoQuote()
+    }
+  }
+  
+  private func functionalParse() {
+    if let _ = self.content.range(of: String(self.quotes)) {
+      // if the file contains quote '"'
+      let startIndex = self.content.characters.startIndex
+      let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
+      let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
+      self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content)
+    }else {
+      // if the file not contain quote
+      self.parserNoQuote()
+    }
   }
 }
 
-extension String {
-  
-  func words(splitBy split: CharacterSet = CharacterSet(charactersIn: ",\r\n")) -> [String] {
-    let quote = "\""
-    var apperQuote = false
-    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-      if quote == String(UnicodeScalar(x)!) {
-        if !apperQuote {
-          apperQuote = true
-        }else {
-          apperQuote = false
-        }
-      }
-      if apperQuote {
-        return false
-      }else { 
-        return split.contains(UnicodeScalar(x)!)
-      }
-      }.flatMap(String.init)
-    return result
-  }
-  
-  func lines(splitBy split: CharacterSet = CharacterSet(charactersIn: "\r\n")) -> [String] {
-    let quote = "\""
-    var apperQuote = false
-    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-      if quote == String(UnicodeScalar(x)!) {
-        if !apperQuote {
-          apperQuote = true
-        }else {
-          apperQuote = false
-        }
-      }
-      if apperQuote {
-        return false
-      }else {
-        return split.contains(UnicodeScalar(x)!)
-      }
-      }.flatMap(String.init)
-    return result
-  }
-  
-}
 
-struct CSVParserIterator: IteratorProtocol {
+// Make a CSVParserIterator
+public struct CSVParserIterator: IteratorProtocol {
   
-  typealias Element = [String]
+  public typealias Element = [String]
   
-  let delimiter: Character
-  let lines: [String]
-  var linesIterator: IndexingIterator<[String]>
+  var rowsIterator: IndexingIterator<[[String]]>
   
-  init(lines: [String], delimiter: Character) {
-    self.lines = lines
-    self.delimiter = delimiter
-    self.linesIterator = self.lines.makeIterator()
+  init(rows: [[String]]) {
+    self.rowsIterator = rows.makeIterator()
   }
   
   
   public mutating func next() -> [String]? {
-    return self.linesIterator.next().map{ $0.words() }
+    return self.rowsIterator.next()
   }
   
 }
 
+// Comfirm to Sequence protocol
 extension CSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
-    return CSVParserIterator(lines: self.lines, delimiter: self.delimiter)
+    return CSVParserIterator(rows: self.rows)
   }
 }
 
 
+// Comfirm to Collection protocol
 extension CSVParser: Collection {
   public typealias Index = Int
-  public var startIndex: Index { return self.lines.startIndex }
+  public var startIndex: Index { return self.rows.startIndex }
   public var endIndex: Index {
-    return self.lines.endIndex
+    return self.rows.endIndex
   }
   
   public func index(after i: Index) -> Index {
-    return self.lines.index(after: i)
+    return self.rows.index(after: i)
   }
   
-  subscript(idx: Index) -> [String] {
+  public subscript(idx: Index) -> [String] {
     get {
-      return self.lines[idx].words()
+      return self.rows[idx]
     }
     
     set (newValue) {
-      self.lines[idx] = newValue.joined(separator: String(self.delimiter))
+      self.rows[idx] = newValue
+    }
+  }
+}
+
+extension CSVParser {
+  // string subscript
+  public subscript(key: String) -> [String]? {
+    guard let index = self.headers.index(of: key) else {
+      return nil
+    }
+    // may be wrong here
+    // must parse first
+    return self.rows.dropFirst().map {
+      // make sure every column
+      if index >= $0.count {
+        return ""
+      }else {
+        return $0[index]
+      }
     }
   }
 }
