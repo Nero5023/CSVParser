@@ -57,113 +57,18 @@ public class CSVParser {
   
   private func functionalParse() {
     if let _ = self.content.range(of: String(self.quotes)) {
+      // if the file contains quote '"'
       let startIndex = self.content.characters.startIndex
       let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
       let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
       self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content)
     }else {
+      // if the file not contain quote
       self.parserNoQuote()
     }
   }
-  
-  
-//  func concurrencyParse(handler:  @escaping ()->()) {
-//    let wordsInOneTime = 100
-//    let parseGroup = DispatchGroup()
-//    // writeRowQueue is a serial queue not concurrent
-//    let writeRowQueue = DispatchQueue(label: "com.csvparser.write", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-//    writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
-//    for i in 0...self.lines.count / wordsInOneTime {
-//      let workItem = DispatchWorkItem(block: {
-//        let min = wordsInOneTime < (self.lines.count - i*wordsInOneTime) ? wordsInOneTime : (self.lines.count - i*wordsInOneTime)
-//        for j in 0..<min{
-//          let index = i*wordsInOneTime + j
-////          self.rows[index] =
-//          let parsedLine = self.lines[index].words()
-////          dispatch_barrier_async(<#T##queue: DispatchQueue##DispatchQueue#>, <#T##block: () -> Void##() -> Void#>)
-//          writeRowQueue.async(group: parseGroup, qos: .default, flags: .barrier) {
-//            self.rows[index] = parsedLine
-//          }
-//        }
-//      })
-//      DispatchQueue.global(qos: .userInitiated).async(group: parseGroup, execute: workItem)
-//
-//    }
-////    parseGroup.notify(queue: DispatchQueue.main, execute: handler)
-//    parseGroup.wait()
-//    handler()
-//  }
-  
-  
-  
 }
 
-extension String {
-  
-  // split the string by character
-  func words(splitBy split: Character = ",") -> [String] {
-    let quote = "\""
-    var apperQuote = false
-    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-      if quote == String(UnicodeScalar(x)!) {
-        apperQuote = !apperQuote
-      }
-      if apperQuote {
-        return false
-      }else {
-        return Character(UnicodeScalar(x)!) == split
-      }
-      }.flatMap(String.init)
-    return result
-  }
-  
-  func lines(splitBy split: CharacterSet = CharacterSet(charactersIn: "\r\n")) -> [String] {
-    let quote = "\""
-    var apperQuote = false
-    let result = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) { x in
-      if quote == String(UnicodeScalar(x)!) {
-        apperQuote = !apperQuote
-      }
-      if apperQuote {
-        return false
-      }else {
-        return split.contains(UnicodeScalar(x)!)
-      }
-      }.flatMap(String.init)
-    return result
-  }
-  
-  
-  func parseCSV(delimiter: Character, lineSeparator: Character, quote: Character) -> [[String]] {
-    var appearQuote = false
-    let splitedLines = self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
-      let char = Character(UnicodeScalar($0)!)
-      if char == quote {
-        appearQuote = !appearQuote
-      }
-      if appearQuote {
-        return false
-      }else {
-        return char == lineSeparator
-      }
-    }
-    appearQuote = false
-    return splitedLines.map { line in
-      line.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
-        let char = Character(UnicodeScalar($0)!)
-        if char == quote {
-          appearQuote = !appearQuote
-        }
-        if appearQuote {
-          return false
-        }else {
-          return char == delimiter
-        }
-      }.flatMap(String.init)
-    }
-  }
-  
-}
 
 // Make a CSVParserIterator
 public struct CSVParserIterator: IteratorProtocol {

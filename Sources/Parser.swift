@@ -8,38 +8,7 @@
 
 import Foundation
 
-extension String {
-  // to split to lines
-  func nzSplitLines(lineSeparator: Character) -> [String] {
-    return self.utf16.split {
-      Character(UnicodeScalar($0)!) == lineSeparator
-    }.flatMap(String.init)
-  }
-  
-  // to split to elements
-  func nzSplitElements(delimiter: Character) -> [String] {
-    return self.utf16.split {
-      return Character(UnicodeScalar($0)!) == delimiter
-    }.flatMap(String.init)
-  }
-  
-  // from string to object data
-  func nzSplitElements(lineSeparator: Character, delimiter: Character) -> [[String]] {
-    let rowString =  self.utf16.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
-      Character(UnicodeScalar($0)!) == lineSeparator
-    }
-    return rowString.map {
-      $0.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
-        Character(UnicodeScalar($0)!) == delimiter
-      }.flatMap(String.init)
-    }
-  }
-  
-  func index(of char: Character, after: String.Index) -> String.Index? {
-    return range(of: String(char), options: .literal, range: after..<self.endIndex, locale: nil)?.lowerBound
-  }
-  
-}
+
 
 extension CSVParser {
   //if there is no quotes in content
@@ -55,8 +24,8 @@ extension CSVParser {
     var nextLine = inputContents.index(of: self.lineSeparator)
     var row = [String]()
     while true {
+      
       // need to pares with quotes
-  
       if inputContents[cursor] == quotes {
         var nextQuote = cursor
         cursor = inputContents.index(after: cursor)
@@ -93,7 +62,7 @@ extension CSVParser {
               row.append(self.content.substring(with: cursor..<nextQuote))
               self.rows.append(row)
               row.removeAll(keepingCapacity: true)
-//              nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
+              //nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
               cursor = inputContents.index(nextQuote, offsetBy: 1 + 1)
               nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
               nextLine = self.content.index(of: self.lineSeparator, after: cursor)
@@ -107,8 +76,6 @@ extension CSVParser {
         }
         continue
       }
-      
-      //
       
       //Next delimiter comes before next newline
       if let nextDelim = nextDelimiter {
@@ -147,6 +114,36 @@ extension CSVParser {
     }
   
   }
+  
+  
+  //Functional Parse
+//    func concurrencyParse(handler:  @escaping ()->()) {
+//      let wordsInOneTime = 100
+//      let parseGroup = DispatchGroup()
+//      // writeRowQueue is a serial queue not concurrent
+//      let writeRowQueue = DispatchQueue(label: "com.csvparser.write", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+//      writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
+//      for i in 0...self.lines.count / wordsInOneTime {
+//        let workItem = DispatchWorkItem(block: {
+//          let min = wordsInOneTime < (self.lines.count - i*wordsInOneTime) ? wordsInOneTime : (self.lines.count - i*wordsInOneTime)
+//          for j in 0..<min{
+//            let index = i*wordsInOneTime + j
+//  //          self.rows[index] =
+//            let parsedLine = self.lines[index].words()
+//  //          dispatch_barrier_async(<#T##queue: DispatchQueue##DispatchQueue#>, <#T##block: () -> Void##() -> Void#>)
+//            writeRowQueue.async(group: parseGroup, qos: .default, flags: .barrier) {
+//              self.rows[index] = parsedLine
+//            }
+//          }
+//        })
+//        DispatchQueue.global(qos: .userInitiated).async(group: parseGroup, execute: workItem)
+//  
+//      }
+//  //    parseGroup.notify(queue: DispatchQueue.main, execute: handler)
+//      parseGroup.wait()
+//      handler()
+//    }
+  
   
   
 }
