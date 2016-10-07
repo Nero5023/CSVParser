@@ -4,14 +4,14 @@ A swift package for read and write CSV file
 ## List to do
 
 - [ ] concurrent parse csv
-- [ ] improve performance
-- [ ] get column
+- [ ] improve performance by uing uft16 view to parse
+- [x] get column by string subscript
 - [ ] error
-- [ ] initialization from string
+- [x] initialization from string
 
 ## Usage
 
-Initialization 
+###  Initialization 
 
 ```swift
 let csv = try CSVParser(filePath: "path/to/csvfile")
@@ -31,7 +31,7 @@ do {
 }
 ```
 
-Read data
+### Read data
 
 ```swift
 do {
@@ -40,6 +40,12 @@ do {
 	for row in csv {
         print(row) // ["first column", "sceond column", "third column"]
     }
+    
+    // get row by int subscript 
+    csv[10] // the No.10 row
+    
+    // get column by string subscript
+    csv["id"] // column with header key "id" 
 	
 }catch {
 	// Error handing
@@ -47,7 +53,7 @@ do {
 
 ```
 
-Write data
+### Write data
 
 ```swift
 do {
@@ -58,6 +64,26 @@ do {
 	
 }catch {
 	// Error handing
+}
+
+```
+
+### subscript
+
+```swift
+// get row by int subscript 
+    csv[10] // the No.10 row
+    
+// get column by string subscript
+csv["id"] // column with header key "id" 
+
+```
+
+### get dictionary elements
+
+```swift
+for dic in csv.enumeratedWithDic() {
+	print(dic) // dic is [String: String]
 }
 
 ```
