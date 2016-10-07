@@ -1,6 +1,6 @@
 import Foundation
 
-class CSVParser {
+public class CSVParser {
   
   
   var content: String
@@ -17,7 +17,7 @@ class CSVParser {
     }
   }
   
-  init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") {
+  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") {
     self.content = content
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
@@ -26,16 +26,16 @@ class CSVParser {
     self.parse()
   }
 
-  convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
+  public convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     let fileContent = try String(contentsOfFile: filePath)
     self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
   }
   
-  func wirite(toFilePath path: String) throws {
+  public func wirite(toFilePath path: String) throws {
     try self.rows.map{ $0.joined(separator: String(self.delimiter)) }.joined(separator: String(self.lineSeparator)).write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
   
-  func enumeratedWithDic() -> [[String: String]] {
+  public func enumeratedWithDic() -> [[String: String]] {
     return self.rows.dropFirst().map {
       var dic = [String: String]()
       for (index, word) in $0.enumerated() {
@@ -47,8 +47,10 @@ class CSVParser {
   
   private func parse() {
     if let _ = self.content.range(of: String(self.quotes)) {
+      // if the file contains quote '"'
       self.parseWithQuotes()
     }else {
+      // if the file not contain quote
       self.parserNoQuote()
     }
   }
@@ -98,6 +100,7 @@ class CSVParser {
 
 extension String {
   
+  // split the string by character
   func words(splitBy split: Character = ",") -> [String] {
     let quote = "\""
     var apperQuote = false
@@ -129,6 +132,7 @@ extension String {
       }.flatMap(String.init)
     return result
   }
+  
   
   func parseCSV(delimiter: Character, lineSeparator: Character, quote: Character) -> [[String]] {
     var appearQuote = false
@@ -162,9 +166,9 @@ extension String {
 }
 
 // Make a CSVParserIterator
-struct CSVParserIterator: IteratorProtocol {
+public struct CSVParserIterator: IteratorProtocol {
   
-  typealias Element = [String]
+  public typealias Element = [String]
   
   var rowsIterator: IndexingIterator<[[String]]>
   
@@ -199,7 +203,7 @@ extension CSVParser: Collection {
     return self.rows.index(after: i)
   }
   
-  subscript(idx: Index) -> [String] {
+  public subscript(idx: Index) -> [String] {
     get {
       return self.rows[idx]
     }
@@ -212,7 +216,7 @@ extension CSVParser: Collection {
 
 extension CSVParser {
   // string subscript
-  subscript(key: String) -> [String]? {
+  public subscript(key: String) -> [String]? {
     guard let index = self.headers.index(of: key) else {
       return nil
     }
