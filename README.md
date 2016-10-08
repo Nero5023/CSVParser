@@ -2,12 +2,45 @@
 A swift package for read and write CSV file
 
 ## List to do
-
+---
 - [ ] concurrent parse csv
 - [ ] improve performance by uing uft16 view to parse
 - [x] get column by string subscript
 - [ ] error
 - [x] initialization from string
+- [ ] Convert JSON To CSV
+- [ ] Convert CSV To JSON
+
+## Requirements
+---
+
+* Swift 3.0+
+
+## Installation
+---
+### Swift Package Manager
+In `Package.swift` file
+
+```swift
+import PackageDescription
+
+let package = Package(
+  name: "YourProject",
+  dependencies: [
+    .Package(url: "https://github.com/Nero5023/CSVParser",
+        majorVersion: 0, minor: 1),
+    ]
+)
+```
+
+Run command
+
+```bash
+$ swift build
+```
+
+
+
 
 ## Usage
 
@@ -68,7 +101,7 @@ do {
 
 ```
 
-### subscript
+### Subscript
 
 ```swift
 // get row by int subscript 
@@ -79,7 +112,7 @@ csv["id"] // column with header key "id"
 
 ```
 
-### get dictionary elements
+### Get dictionary elements
 
 ```swift
 for dic in csv.enumeratedWithDic() {
