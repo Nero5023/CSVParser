@@ -58,10 +58,11 @@ public class CSVParser {
   private func functionalParse() {
     if let _ = self.content.range(of: String(self.quotes)) {
       // if the file contains quote '"'
-      let startIndex = self.content.characters.startIndex
-      let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
-      let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
-      self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content)
+//      let startIndex = self.content.characters.startIndex
+//      let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
+//      let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
+//      self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content
+      self.functionalParseWithQuote()
     }else {
       // if the file not contain quote
       self.parserNoQuote()

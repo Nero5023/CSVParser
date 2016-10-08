@@ -32,7 +32,7 @@ class CSVParserTests: XCTestCase {
   
   func testParsePerformance() {
     measure {
-    let _ = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+      let _ = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
     }
   }
 
