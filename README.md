@@ -8,6 +8,8 @@ A swift package for read and write CSV file
 - [x] get column by string subscript
 - [ ] error
 - [x] initialization from string
+- [ ] Convert JSON To CSV
+- [ ] Convert CSV To JSON
 
 ## Usage
 
