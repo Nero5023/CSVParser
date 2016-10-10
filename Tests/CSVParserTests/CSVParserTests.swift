@@ -12,7 +12,8 @@ class CSVParserTests: XCTestCase {
       }
 
       let csv1 = try CSVParser(filePath: "/Users/Nero/Desktop/quotes.csv")
-      
+      let str = try csv1.toJSON()
+      print(str)
       for line in csv1 {
         print(line)
       }
