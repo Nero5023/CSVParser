@@ -9,7 +9,7 @@ A swift package for read and write CSV file
 - [ ] error
 - [x] initialization from string
 - [ ] Convert JSON To CSV
-- [ ] Convert CSV To JSON
+- [x] Convert CSV To JSON
 
 ## Requirements
 ---
