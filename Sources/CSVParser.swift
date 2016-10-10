@@ -48,8 +48,8 @@ public class CSVParser {
   public func toJSON() throws -> String? {
     let dic = self.enumeratedWithDic()
     let jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-    let jsonStr = NSString(data: jsonData, encoding: String.Encoding.utf8.rawValue)
-    return jsonStr as String?
+    let jsonStr = String(data: jsonData, encoding: String.Encoding.utf8)
+    return jsonStr
   }
   
   private func parse() {
