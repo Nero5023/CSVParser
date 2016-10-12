@@ -1,5 +1,6 @@
 import Foundation
 
+
 public class CSVParser {
   
   var content: String
@@ -77,7 +78,7 @@ public class CSVParser {
   
   static public func jsonToCSVString(jsonData: Data) throws -> String {
     guard let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
-      return ""
+      throw CSVParserError.jsonObjTypeNotMatch
     }
     let delimiter = ","
     let lineSeparator = "\r\n"
@@ -89,16 +90,20 @@ public class CSVParser {
       result + delimiter + col
     }
     
+    // help method
+    // parse dic to a line of csv string
     func dicToStr(dic: [String: Any]) -> String {
       var result = lineSeparator
       for key in header {
-        result = result + parseValue(value: dic[key]) + delimiter
+        result = result + parseDicValue(value: dic[key]) + delimiter
       }
       result.remove(at: result.index(before: result.endIndex))
       return result
     }
     
-    func parseValue(value: Any?) -> String {
+    // help method
+    // parse dic value to string
+    func parseDicValue(value: Any?) -> String {
       if let value = value as? String {
         return value
       }else if let intValue = value as? Int {
