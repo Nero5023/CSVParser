@@ -16,7 +16,7 @@ extension CSVParser {
     self.rows = self.content.nzSplitElements(lineSeparator: self.lineSeparator, delimiter: self.delimiter)
   }
   
-  func parseWithQuotes() {
+  func parseWithQuotes() throws {
     let inputContents = content.characters
 
     var cursor = inputContents.startIndex
@@ -70,8 +70,7 @@ extension CSVParser {
             }
             
           }else {
-            // TODO: raise error
-            fatalError("No matched quotes")
+            throw CSVParserError.containMismatchedQuotes
           }
         }
         continue

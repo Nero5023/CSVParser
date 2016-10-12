@@ -10,4 +10,5 @@ import Foundation
 
 enum CSVParserError: Error {
   case jsonObjTypeNotMatch
+  case containMismatchedQuotes
 }

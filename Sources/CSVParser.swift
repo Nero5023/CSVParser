@@ -17,18 +17,18 @@ public class CSVParser {
     }
   }
   
-  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") {
+  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     self.content = content
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
     self.rows = []
     
-    self.parse()
+    try self.parse()
   }
 
   public convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     let fileContent = try String(contentsOfFile: filePath)
-    self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
+    try self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
   }
   
   public func wirite(toFilePath path: String) throws {
@@ -52,10 +52,10 @@ public class CSVParser {
     return jsonStr
   }
   
-  private func parse() {
+  private func parse() throws {
     if let _ = self.content.range(of: String(self.quotes)) {
       // if the file contains quote '"'
-      self.parseWithQuotes()
+      try self.parseWithQuotes()
     }else {
       // if the file not contain quote
       self.parserNoQuote()
