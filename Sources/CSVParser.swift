@@ -1,7 +1,7 @@
 import Foundation
 
+
 public class CSVParser {
-  
   
   var content: String
   var rows: [[String]]
@@ -65,16 +65,58 @@ public class CSVParser {
   private func functionalParse() {
     if let _ = self.content.range(of: String(self.quotes)) {
       // if the file contains quote '"'
-//      let startIndex = self.content.characters.startIndex
-//      let delimiterIndex = self.content.index(of: self.delimiter, after: startIndex)
-//      let lineSIndex = self.content.index(of: self.lineSeparator, after: startIndex)
-//      self.rows = functionalParseIter(cursor: startIndex, delimiterIndex: delimiterIndex, lineSIndex: lineSIndex, row: [], rows: [], content: self.content
       self.functionalParseWithQuote()
     }else {
       // if the file not contain quote
       self.parserNoQuote()
     }
   }
+  
+  static public func jsonToCSVString(jsonData: Data) throws -> String {
+    guard let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
+      throw CSVParserError.jsonObjTypeNotMatch
+    }
+    let delimiter = ","
+    let lineSeparator = "\r\n"
+    if jsonObj.count == 0 {
+      return ""
+    }
+    let header = jsonObj[0].keys
+    let headerStr = header.dropFirst().reduce(header.first!) { result, col in
+      result + delimiter + col
+    }
+    
+    // help method
+    // parse dic to a line of csv string
+    func dicToStr(dic: [String: Any]) -> String {
+      var result = lineSeparator
+      for key in header {
+        result = result + parseDicValue(value: dic[key]) + delimiter
+      }
+      result.remove(at: result.index(before: result.endIndex))
+      return result
+    }
+    
+    // help method
+    // parse dic value to string
+    func parseDicValue(value: Any?) -> String {
+      if let value = value as? String {
+        return value
+      }else if let intValue = value as? Int {
+        return String(intValue)
+      }else if let floatValue = value as? Float {
+        return String(floatValue)
+      }
+      return ""
+    }
+    
+    let csvContent = jsonObj.reduce(headerStr) { (result, row) -> String in
+      result + dicToStr(dic: row)
+    }
+    return csvContent
+  }
+  
+  
 }
 
 
