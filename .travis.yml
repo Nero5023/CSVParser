@@ -29,17 +29,17 @@ before_install:
         sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 100;
     fi
 install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-        wget https://swift.org/builds/swift-3.0-release/xcode/${TOOLCHAIN}/${TOOLCHAIN}-osx.pkg;
-        pkgutil --expand ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.pkg ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg;
-        cat ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg/${TOOLCHAIN}-osx-package.pkg/Payload | gunzip -dc |cpio -i;
-        export PATH=${TRAVIS_BUILD_DIR}/usr/bin:"${PATH}";
-    fi
-  # - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  #       wget https://swift.org/builds/swift-3.0-release/ubuntu1404/${TOOLCHAIN}/${TOOLCHAIN}-ubuntu14.04.tar.gz;
-  #       tar xzf ${TOOLCHAIN}-ubuntu14.04.tar.gz;
-  #       export PATH=${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-ubuntu14.04/usr/bin:"${PATH}";
+  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+  #       wget https://swift.org/builds/swift-3.0-release/xcode/${TOOLCHAIN}/${TOOLCHAIN}-osx.pkg;
+  #       pkgutil --expand ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.pkg ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg;
+  #       cat ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg/${TOOLCHAIN}-osx-package.pkg/Payload | gunzip -dc |cpio -i;
+  #       export PATH=${TRAVIS_BUILD_DIR}/usr/bin:"${PATH}";
   #   fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        wget https://swift.org/builds/swift-3.0-release/ubuntu1404/${TOOLCHAIN}/${TOOLCHAIN}-ubuntu14.04.tar.gz;
+        tar xzf ${TOOLCHAIN}-ubuntu14.04.tar.gz;
+        export PATH=${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-ubuntu14.04/usr/bin:"${PATH}";
+    fi
 
 script:
   - swift build
