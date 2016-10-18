@@ -11,7 +11,7 @@ compiler:
 
 os:
   - linux
-  - osx
+  # - osx
 
 osx_image: xcode8.0
 
