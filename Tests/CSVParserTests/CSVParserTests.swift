@@ -32,10 +32,19 @@ class CSVParserTests: XCTestCase {
   }
   
   func testParsePerformance() {
-    measure {
-      let _ = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
-    }
+//    measure {
+//      let _ = try! CSVParser(filePath: "/Users/Nero/Desktop/large.csv")
+//    }
   }
+  
+  func testParseJSON() {
+    let jsonstr = try! String(contentsOfFile: "/Users/Nero/Desktop/testjson.json")
+    let jsonData = jsonstr.data(using: .utf8)!
+    let result = try! CSVParser.jsonToCSVString(jsonData: jsonData)
+    print(result)
+  }
+  
+  
 
   
   static var allTests : [(String, (CSVParserTests) -> () throws -> Void)] {

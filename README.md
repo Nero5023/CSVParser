@@ -6,7 +6,7 @@ A swift package for read and write CSV file
 - [ ] concurrent parse csv
 - [ ] improve performance by uing uft16 view to parse
 - [x] get column by string subscript
-- [ ] error
+- [x] error
 - [x] initialization from string
 - [ ] Convert JSON To CSV
 - [x] Convert CSV To JSON
@@ -39,6 +39,15 @@ Run command
 $ swift build
 ```
 
+### Carthage
+
+To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "Nero5023/CSVParser" ~> 0.2
+```
+
+Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.
 
 
 

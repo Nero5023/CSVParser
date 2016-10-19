@@ -106,4 +106,8 @@ extension String {
     return range(of: String(char), options: .literal, range: after..<self.endIndex, locale: nil)?.lowerBound
   }
   
+  mutating func removeLast() -> Character {
+    return self.remove(at: self.index(before: self.endIndex))
+  }
+  
 }
