@@ -6,7 +6,7 @@ A swift package for read and write CSV file
 - [ ] concurrent parse csv
 - [ ] improve performance by uing uft16 view to parse
 - [x] get column by string subscript
-- [ ] error
+- [x] error
 - [x] initialization from string
 - [ ] Convert JSON To CSV
 - [x] Convert CSV To JSON
