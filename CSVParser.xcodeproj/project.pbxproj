@@ -1,0 +1,260 @@
+// !$*UTF8*$!
+{
+    archiveVersion = 1;
+    classes = {};
+    objectVersion = 46;
+    rootObject = __RootObject_;
+    objects = {
+        __RootObject_ = {
+            isa = PBXProject;
+            attributes = {LastUpgradeCheck = 9999;};
+            buildConfigurationList = ___RootConfs_;
+            compatibilityVersion = 'Xcode 3.2';
+            developmentRegion = English;
+            hasScannedForEncodings = 0;
+            knownRegions = (en);
+            mainGroup = ___RootGroup_;
+            productRefGroup = ____Products_;
+            projectDirPath = '';
+            projectRoot = '';
+            targets = (______Target_CSVParser, ______Target_CSVParserTests);
+        };
+        '__PBXFileRef_Package.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Package.swift';
+            sourceTree = '<group>';
+        };
+        ___RootGroup_ = {
+            isa = PBXGroup;
+            children = ('__PBXFileRef_Package.swift', _____Configs_, _____Sources_,  Dependencies_, _______Tests_, ____Products_);
+            sourceTree = '<group>';
+        };
+        _______Group_CSVParser = {
+            isa = PBXGroup;
+            name = 'CSVParser';
+            path = 'Sources';
+            sourceTree = '<group>';
+            children = ('__PBXFileRef_Sources/CSVParser.swift', '__PBXFileRef_Sources/Errors.swift', '__PBXFileRef_Sources/FunctionalParse.swift', '__PBXFileRef_Sources/Parser.swift', '__PBXFileRef_Sources/String+Extension.swift');
+        };
+        '__PBXFileRef_Sources/CSVParser.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'CSVParser.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/Errors.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Errors.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/FunctionalParse.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'FunctionalParse.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/Parser.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Parser.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/String+Extension.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'String+Extension.swift';
+            sourceTree = '<group>';
+        };
+        ______Target_CSVParser = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = _______Confs_CSVParser;
+            buildPhases = (CompilePhase_CSVParser, ___LinkPhase_CSVParser);
+            buildRules = ();
+            dependencies = ();
+            name = 'CSVParser';
+            productName = CSVParser;
+            productReference = _____Product_CSVParser;
+            productType = 'com.apple.product-type.framework';
+        };
+        _____Product_CSVParser = {
+            isa = PBXFileReference;
+            explicitFileType = 'wrapper.framework';
+            path = 'CSVParser.framework';
+            sourceTree = BUILT_PRODUCTS_DIR;
+        };
+        CompilePhase_CSVParser = {
+            isa = PBXSourcesBuildPhase;
+            files = ('__src_cc_ref_Sources/CSVParser.swift', '__src_cc_ref_Sources/Errors.swift', '__src_cc_ref_Sources/FunctionalParse.swift', '__src_cc_ref_Sources/Parser.swift', '__src_cc_ref_Sources/String+Extension.swift');
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        '__src_cc_ref_Sources/CSVParser.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/CSVParser.swift';
+        };
+        '__src_cc_ref_Sources/Errors.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/Errors.swift';
+        };
+        '__src_cc_ref_Sources/FunctionalParse.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/FunctionalParse.swift';
+        };
+        '__src_cc_ref_Sources/Parser.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/Parser.swift';
+        };
+        '__src_cc_ref_Sources/String+Extension.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/String+Extension.swift';
+        };
+        ___LinkPhase_CSVParser = {
+            isa = PBXFrameworksBuildPhase;
+            files = ();
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        _______Confs_CSVParser = {
+            isa = XCConfigurationList;
+            buildConfigurations = (___DebugConf_CSVParser, _ReleaseConf_CSVParser);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+        ___DebugConf_CSVParser = {
+            isa = XCBuildConfiguration;
+            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'CSVParser.xcodeproj/CSVParser_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'CSVParser'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
+            name = Debug;
+        };
+        _ReleaseConf_CSVParser = {
+            isa = XCBuildConfiguration;
+            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'CSVParser.xcodeproj/CSVParser_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'CSVParser'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
+            name = Release;
+        };
+        __Dependency_CSVParser = {
+            isa = PBXTargetDependency;
+            target = ______Target_CSVParser;
+        };
+        _______Group_CSVParserTests = {
+            isa = PBXGroup;
+            name = 'CSVParserTests';
+            path = 'Tests/CSVParserTests';
+            sourceTree = '<group>';
+            children = ('__PBXFileRef_Tests/CSVParserTests/CSVParserTests.swift');
+        };
+        '__PBXFileRef_Tests/CSVParserTests/CSVParserTests.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'CSVParserTests.swift';
+            sourceTree = '<group>';
+        };
+        ______Target_CSVParserTests = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = _______Confs_CSVParserTests;
+            buildPhases = (CompilePhase_CSVParserTests, ___LinkPhase_CSVParserTests);
+            buildRules = ();
+            dependencies = (__Dependency_CSVParser);
+            name = 'CSVParserTests';
+            productName = CSVParserTests;
+            productReference = _____Product_CSVParserTests;
+            productType = 'com.apple.product-type.bundle.unit-test';
+        };
+        _____Product_CSVParserTests = {
+            isa = PBXFileReference;
+            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
+            path = 'CSVParserTests.xctest';
+            sourceTree = BUILT_PRODUCTS_DIR;
+        };
+        CompilePhase_CSVParserTests = {
+            isa = PBXSourcesBuildPhase;
+            files = ('__src_cc_ref_Tests/CSVParserTests/CSVParserTests.swift');
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        '__src_cc_ref_Tests/CSVParserTests/CSVParserTests.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/CSVParserTests/CSVParserTests.swift';
+        };
+        ___LinkPhase_CSVParserTests = {
+            isa = PBXFrameworksBuildPhase;
+            files = (_LinkFileRef_CSVParser_via_CSVParserTests);
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        _LinkFileRef_CSVParser_via_CSVParserTests = {
+            isa = PBXBuildFile;
+            fileRef = _____Product_CSVParser;
+        };
+        _______Confs_CSVParserTests = {
+            isa = XCConfigurationList;
+            buildConfigurations = (___DebugConf_CSVParserTests, _ReleaseConf_CSVParserTests);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+        ___DebugConf_CSVParserTests = {
+            isa = XCBuildConfiguration;
+            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'CSVParser.xcodeproj/CSVParserTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
+            name = Debug;
+        };
+        _ReleaseConf_CSVParserTests = {
+            isa = XCBuildConfiguration;
+            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'CSVParser.xcodeproj/CSVParserTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
+            name = Release;
+        };
+        __Dependency_CSVParserTests = {
+            isa = PBXTargetDependency;
+            target = ______Target_CSVParserTests;
+        };
+        '__PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig' = {
+            isa = PBXFileReference;
+            lastKnownFileType = text.xcconfig;
+            path = 'CSVParser.xcodeproj/Configs/Project.xcconfig';
+            sourceTree = '<group>';
+        };
+        _____Configs_ = {
+            isa = PBXGroup;
+            children = ('__PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig');
+            name = Configs;
+            sourceTree = '<group>';
+        };
+        _____Sources_ = {
+            isa = PBXGroup;
+            children = (_______Group_CSVParser);
+            name = Sources;
+            sourceTree = '<group>';
+        };
+        _______Tests_ = {
+            isa = PBXGroup;
+            children = (_______Group_CSVParserTests);
+            name = Tests;
+            sourceTree = '<group>';
+        };
+       TestProducts_ = {
+            isa = PBXGroup;
+            children = (_____Product_CSVParserTests);
+            name = Tests;
+            sourceTree = '<group>';
+        };
+        ____Products_ = {
+            isa = PBXGroup;
+            children = (TestProducts_, _____Product_CSVParser);
+            name = Products;
+            sourceTree = '<group>';
+        };
+        _______Debug_ = {
+            isa = XCBuildConfiguration;
+            baseConfigurationReference = '__PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig';
+            buildSettings = {};
+            name = Debug;
+        };
+        _____Release_ = {
+            isa = XCBuildConfiguration;
+            baseConfigurationReference = '__PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig';
+            buildSettings = {};
+            name = Release;
+        };
+        ___RootConfs_ = {
+            isa = XCConfigurationList;
+            buildConfigurations = (_______Debug_, _____Release_);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+    };
+}
