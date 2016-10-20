@@ -20,9 +20,9 @@ xcode_project: CSVParser.xcodeproj
 xcode_scheme: CSVParser
 
 env:
-  - TOOLCHAIN="swift-3.0-RELEASE"
   global:
-    - FRAMEWORK_NAME=CSVParser
+    - TOOLCHAIN="swift-3.0-RELEASE"
+    - FRAMEWORK_NAME="CSVParser"
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
