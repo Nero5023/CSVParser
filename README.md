@@ -22,7 +22,7 @@ A swift library for fast read and write CSV file. This library supports all Appl
 
 ## Installation
 ---
-### Swift Package Manager
+### Swift Package Manager(Support Ubuntu)
 **If you want to use this package on Ubuntu, you shounld install with Swift Package Manager**
 
 In `Package.swift` file
