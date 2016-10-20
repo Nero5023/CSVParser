@@ -9,7 +9,7 @@ dist: trusty
 compiler:
   - clang
 
-language: objective-c
+# language: objective-c
 
 os:
   - linux

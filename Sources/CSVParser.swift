@@ -77,7 +77,7 @@ public class CSVParser {
       throw CSVParserError.jsonObjTypeNotMatch
     }
     let delimiter = ","
-    let lineSeparator = "\r\n"
+    let lineSeparator = "\n"
     if jsonObj.count == 0 {
       return ""
     }
