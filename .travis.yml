@@ -50,8 +50,9 @@ install:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-        swift build
+        swift build;
     fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-        carthage build --no-skip-current
-        carthage archive $FRAMEWORK_NAME
+        carthage build --no-skip-current;
+        carthage archive $FRAMEWORK_NAME;
+    fi
