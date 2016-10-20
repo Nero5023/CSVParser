@@ -175,7 +175,6 @@ extension CSVParser {
     guard let index = self.headers.index(of: key) else {
       return nil
     }
-    // may be wrong here
     // must parse first
     return self.rows.dropFirst().map {
       // make sure every column

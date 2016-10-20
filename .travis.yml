@@ -13,7 +13,7 @@ compiler:
 
 os:
   - linux
-  # - osx
+  - osx
 
 osx_image: xcode8.0
 xcode_project: CSVParser.xcodeproj
@@ -36,7 +36,7 @@ before_install:
     fi
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-        brew outdated carthage || brew upgrade carthage
+        brew outdated carthage || brew upgrade carthage;
     fi
   #       wget https://swift.org/builds/swift-3.0-release/xcode/${TOOLCHAIN}/${TOOLCHAIN}-osx.pkg;
   #       pkgutil --expand ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.pkg ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg;
