@@ -1,5 +1,5 @@
 # CSVParser
-A swift library for fast read and write CSV file
+A swift library for fast read and write CSV file. This library supports all Apple platform and **Linux**.
 
 [![Build Status](https://travis-ci.org/Nero5023/CSVParser.svg?branch=master)](https://travis-ci.org/Nero5023/CSVParser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -23,6 +23,8 @@ A swift library for fast read and write CSV file
 ## Installation
 ---
 ### Swift Package Manager
+**If you want to use this package on Ubuntu, you shounld install with Swift Package Manager**
+
 In `Package.swift` file
 
 ```swift
