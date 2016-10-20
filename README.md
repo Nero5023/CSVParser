@@ -65,7 +65,7 @@ do {
 	// Error handing
 }
 
-// Cuestom delimiter
+// Custom delimiter
 do {
 	let csv = try CSVParser(filePath: "path/to/csvfile", delimiter: ";")
 }catch {
@@ -127,5 +127,30 @@ csv["id"] // column with header key "id"
 for dic in csv.enumeratedWithDic() {
 	print(dic) // dic is [String: String]	
 }
+
+```
+
+### CSV to JSON
+The result json type is `[{"header0": "a","header1": "b"},{"header0": "a", "header1": "b"}]`
+
+```swift
+do {
+	let jsonStr = try csv.toJSON()
+}catch {
+	// Error handing
+} 
+
+```
+
+### JSON to CSV string
+Now only support this json type `[{"header0": "a","header1": "b"},{"header0": "a", "header1": "b"}]`
+
+
+```swift
+do {
+	let csvString = try CSVParser.jsonToCSVString(jsonData: jsonData) // jsonData is the Data type ot json
+}catch {
+	// Error handing
+} 
 
 ```
