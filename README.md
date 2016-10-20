@@ -34,7 +34,7 @@ let package = Package(
   name: "YourProject",
   dependencies: [
     .Package(url: "https://github.com/Nero5023/CSVParser",
-        majorVersion: 0, minor: 1),
+        majorVersion: 1),
     ]
 )
 ```
@@ -50,7 +50,7 @@ $ swift build
 To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Nero5023/CSVParser" ~> 0.2
+github "Nero5023/CSVParser" ~> 1.0
 ```
 
 Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.
