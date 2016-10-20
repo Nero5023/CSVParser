@@ -1,5 +1,9 @@
 # CSVParser
-A swift package for read and write CSV file
+A swift library for fast read and write CSV file. This library supports all Apple platform and **Linux**.
+
+[![Build Status](https://travis-ci.org/Nero5023/CSVParser.svg?branch=master)](https://travis-ci.org/Nero5023/CSVParser)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Plafrom](https://img.shields.io/badge/platform-linux%20%7C%20ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos%20-lightgray.svg)](https://github.com/Nero5023/CSVParser)
 
 ## List to do
 ---
@@ -8,7 +12,7 @@ A swift package for read and write CSV file
 - [x] get column by string subscript
 - [x] error
 - [x] initialization from string
-- [ ] Convert JSON To CSV
+- [x] Convert JSON To CSV
 - [x] Convert CSV To JSON
 
 ## Requirements
@@ -18,7 +22,9 @@ A swift package for read and write CSV file
 
 ## Installation
 ---
-### Swift Package Manager
+### Swift Package Manager(Support Ubuntu)
+**If you want to use this package on Ubuntu, you shounld install with Swift Package Manager**
+
 In `Package.swift` file
 
 ```swift
@@ -28,7 +34,7 @@ let package = Package(
   name: "YourProject",
   dependencies: [
     .Package(url: "https://github.com/Nero5023/CSVParser",
-        majorVersion: 0, minor: 1),
+        majorVersion: 1),
     ]
 )
 ```
@@ -44,7 +50,7 @@ $ swift build
 To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Nero5023/CSVParser" ~> 0.2
+github "Nero5023/CSVParser" ~> 1.0
 ```
 
 Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.
@@ -65,7 +71,7 @@ do {
 	// Error handing
 }
 
-// Cuestom delimiter
+// Custom delimiter
 do {
 	let csv = try CSVParser(filePath: "path/to/csvfile", delimiter: ";")
 }catch {
@@ -127,5 +133,30 @@ csv["id"] // column with header key "id"
 for dic in csv.enumeratedWithDic() {
 	print(dic) // dic is [String: String]	
 }
+
+```
+
+### CSV to JSON
+The result json type is `[{"header0": "a","header1": "b"},{"header0": "a", "header1": "b"}]`
+
+```swift
+do {
+	let jsonStr = try csv.toJSON()
+}catch {
+	// Error handing
+} 
+
+```
+
+### JSON to CSV string
+Now only support this json type `[{"header0": "a","header1": "b"},{"header0": "a", "header1": "b"}]`
+
+
+```swift
+do {
+	let csvString = try CSVParser.jsonToCSVString(jsonData: jsonData) // jsonData is the Data type ot json
+}catch {
+	// Error handing
+} 
 
 ```
