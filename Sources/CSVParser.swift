@@ -17,6 +17,13 @@ public class CSVParser {
     }
   }
   
+  /**
+    Create a CSVParser from String
+   - Parameters:
+    - content: the CSV String to parse
+    - delimiter: the delimiter of the csv string
+    - lineSeparator: the line separator of the csv string
+  */
   public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     self.content = content
     self.delimiter = delimiter
@@ -25,7 +32,14 @@ public class CSVParser {
     
     try self.parse()
   }
-
+  
+  /**
+   Create a CSVParser from String
+   - Parameters:
+     - content: the CSV String to parse
+     - delimiter: the delimiter of the csv file
+     - lineSeparator: the line separator of the csv file
+   */
   public convenience init(filePath: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
     let fileContent = try String(contentsOfFile: filePath)
     try self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
@@ -45,12 +59,6 @@ public class CSVParser {
     }
   }
   
-  public func toJSON() throws -> String? {
-    let dic = self.enumeratedWithDic()
-    let jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-    let jsonStr = String(data: jsonData, encoding: String.Encoding.utf8)
-    return jsonStr
-  }
   
   private func parse() throws {
     if let _ = self.content.range(of: String(self.quotes)) {
@@ -72,6 +80,51 @@ public class CSVParser {
     }
   }
   
+  // MARK: CSV To JSON
+  /**
+   Convert csv to JSON
+   
+   The return json type
+   [
+   {
+   "header0": "a",
+   "header1": "b"
+   },
+   {
+   "header0": "a",
+   "header1": "b"
+   }
+   ]
+   
+   - Returns: the parsed json string
+   */
+  public func toJSON() throws -> String? {
+    let dic = self.enumeratedWithDic()
+    let jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
+    let jsonStr = String(data: jsonData, encoding: String.Encoding.utf8)
+    return jsonStr
+  }
+  
+  //MARK: JSON TO CSV
+  /**
+   Static method Convert Json to csv string
+   You can use result to generate a CSVParser instance
+   
+   The json input now only suport this json type
+   [
+   {
+   "header0": "a",
+   "header1": "b"
+   },
+   {
+   "header0": "a",
+   "header1": "b"
+   }
+   ]
+   
+   - Parameter: jsonData: the json object with Data type.
+   - Returns: the parsed CSV String
+  */
   static public func jsonToCSVString(jsonData: Data) throws -> String {
     guard let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
       throw CSVParserError.jsonObjTypeNotMatch
@@ -120,7 +173,7 @@ public class CSVParser {
 }
 
 
-// Make a CSVParserIterator
+//MARK: Make a CSVParserIterator
 public struct CSVParserIterator: IteratorProtocol {
   
   public typealias Element = [String]
@@ -138,7 +191,7 @@ public struct CSVParserIterator: IteratorProtocol {
   
 }
 
-// Comfirm to Sequence protocol
+//MARK: Comfirm to Sequence protocol
 extension CSVParser: Sequence {
   public func makeIterator() -> CSVParserIterator {
     return CSVParserIterator(rows: self.rows)
@@ -146,7 +199,7 @@ extension CSVParser: Sequence {
 }
 
 
-// Comfirm to Collection protocol
+//MARK: Comfirm to Collection protocol
 extension CSVParser: Collection {
   public typealias Index = Int
   public var startIndex: Index { return self.rows.startIndex }
@@ -158,6 +211,10 @@ extension CSVParser: Collection {
     return self.rows.index(after: i)
   }
   
+  /**
+   The Int subscript
+   - Returns: the ith row
+  */
   public subscript(idx: Index) -> [String] {
     get {
       return self.rows[idx]
@@ -170,7 +227,10 @@ extension CSVParser: Collection {
 }
 
 extension CSVParser {
-  // string subscript
+  /**
+   The String subscript
+   - Returns: the column
+   */
   public subscript(key: String) -> [String]? {
     guard let index = self.headers.index(of: key) else {
       return nil
