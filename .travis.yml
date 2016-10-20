@@ -9,14 +9,20 @@ dist: trusty
 compiler:
   - clang
 
+language: objective-c
+
 os:
   - linux
   # - osx
 
 osx_image: xcode8.0
+xcode_project: CSVParser.xcodeproj
+xcode_scheme: CSVParser
 
 env:
   - TOOLCHAIN="swift-3.0-RELEASE"
+  global:
+    FRAMEWORK_NAME=CSVParser
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -29,12 +35,13 @@ before_install:
         sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 100;
     fi
 install:
-  # - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+        brew outdated carthage || brew upgrade carthage
   #       wget https://swift.org/builds/swift-3.0-release/xcode/${TOOLCHAIN}/${TOOLCHAIN}-osx.pkg;
   #       pkgutil --expand ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.pkg ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg;
   #       cat ${TRAVIS_BUILD_DIR}/${TOOLCHAIN}-osx.unpkg/${TOOLCHAIN}-osx-package.pkg/Payload | gunzip -dc |cpio -i;
   #       export PATH=${TRAVIS_BUILD_DIR}/usr/bin:"${PATH}";
-  #   fi
+    fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
         wget https://swift.org/builds/swift-3.0-release/ubuntu1404/${TOOLCHAIN}/${TOOLCHAIN}-ubuntu14.04.tar.gz;
         tar xzf ${TOOLCHAIN}-ubuntu14.04.tar.gz;
@@ -42,4 +49,9 @@ install:
     fi
 
 script:
-  - swift build
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        swift build
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+        carthage build --no-skip-current
+        carthage archive $FRAMEWORK_NAME
