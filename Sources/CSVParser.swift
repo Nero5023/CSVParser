@@ -45,9 +45,24 @@ public class CSVParser {
     try self.init(content: fileContent, delimiter: delimiter, lineSeparator: lineSeparator)
   }
   
+  /**
+   Create a CSVParser from [[String]]
+   - Parameters:
+   - elements: the elements in the csv file
+   - delimiter: the delimiter of the csv file
+   - lineSeparator: the line separator of the csv file
+   */
+  public init(elements: [[String]], delimiter: Character = ",", lineSeparator: Character = "\n") {
+    self.rows = elements
+    self.content = ""
+    self.delimiter = delimiter
+    self.lineSeparator = lineSeparator
+  }
+  
   public func wirite(toFilePath path: String) throws {
     try self.rows.map{ $0.joined(separator: String(self.delimiter)) }.joined(separator: String(self.lineSeparator)).write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
+  
   
   public func enumeratedWithDic() -> [[String: String]] {
     return self.rows.dropFirst().map {
