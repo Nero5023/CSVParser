@@ -77,6 +77,9 @@ do {
 }catch {
 	// Error handing
 }
+
+// init from elements
+let csv = try CSVParser(elements: [["a", "b", "c"], ["1", "2", "3"]])
 ```
 
 ### Read data
