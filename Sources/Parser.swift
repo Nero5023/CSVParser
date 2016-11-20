@@ -23,7 +23,7 @@ extension CSVParser {
     var nextDelimiter = inputContents.index(of: self.delimiter)
     var nextLine = inputContents.index(of: self.lineSeparator)
     var row = [String]()
-    while true {
+    while true && cursor != inputContents.endIndex {
       
       // need to pares with quotes
       if inputContents[cursor] == quotes {
@@ -34,7 +34,9 @@ extension CSVParser {
             nextQuote = nextQ
             
             // end of file
-            if nextQuote == inputContents.endIndex {
+            if nextQuote == inputContents.endIndex
+                        || inputContents.index(after: nextQuote) == inputContents.endIndex {
+              
               row.append(self.content.substring(with: cursor..<nextQuote))
               self.rows.append(row)
               return
