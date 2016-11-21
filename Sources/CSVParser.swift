@@ -4,8 +4,16 @@ import Foundation
 public class CSVParser {
   
   var content: String
-  var rows: [[String]]
+  var _rows: [[String]]
   
+  var rows: [[String]] {
+    get {
+      if let lastElement = _rows.last, lastElement == [""] {
+        return Array(_rows.dropLast())
+      }
+      return _rows
+    }
+  }
   // config
   let delimiter: Character
   let lineSeparator: Character
@@ -13,7 +21,7 @@ public class CSVParser {
   
   var headers: [String] {
     get {
-      return self.rows.first ?? []
+      return self._rows.first ?? []
     }
   }
   
@@ -28,7 +36,7 @@ public class CSVParser {
     self.content = content
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
-    self.rows = []
+    self._rows = []
     
     try self.parse()
   }
@@ -53,10 +61,10 @@ public class CSVParser {
    - lineSeparator: the line separator of the csv file
    */
   public init(elements: [[String]], delimiter: Character = ",", lineSeparator: Character = "\n") {
-    self.rows = elements
     self.content = ""
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
+    self._rows = elements
   }
   
   public func wirite(toFilePath path: String) throws {
@@ -236,7 +244,7 @@ extension CSVParser: Collection {
     }
     
     set (newValue) {
-      self.rows[idx] = newValue
+      self._rows[idx] = newValue
     }
   }
 }

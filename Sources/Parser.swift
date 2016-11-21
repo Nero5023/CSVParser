@@ -13,7 +13,7 @@ import Foundation
 extension CSVParser {
   //if there is no quotes in content
   func parserNoQuote() {
-    self.rows = self.content.nzSplitElements(lineSeparator: self.lineSeparator, delimiter: self.delimiter)
+    self._rows = self.content.nzSplitElements(lineSeparator: self.lineSeparator, delimiter: self.delimiter)
   }
   
   func parseWithQuotes() throws {
@@ -38,7 +38,7 @@ extension CSVParser {
                         || inputContents.index(after: nextQuote) == inputContents.endIndex {
               
               row.append(self.content.substring(with: cursor..<nextQuote))
-              self.rows.append(row)
+              self._rows.append(row)
               return
             }
             
@@ -62,7 +62,7 @@ extension CSVParser {
             // come accross nextline
             if inputContents[inputContents.index(after: nextQuote)] == self.lineSeparator {
               row.append(self.content.substring(with: cursor..<nextQuote))
-              self.rows.append(row)
+              self._rows.append(row)
               row.removeAll(keepingCapacity: true)
               //nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
               cursor = inputContents.index(nextQuote, offsetBy: 1 + 1)
@@ -93,7 +93,7 @@ extension CSVParser {
       // end of row
       if let nextNewLine = nextLine {
         row.append(self.content.substring(with: cursor..<nextNewLine))
-        self.rows.append(row)
+        self._rows.append(row)
         row.removeAll(keepingCapacity: true)
         cursor = inputContents.index(nextNewLine, offsetBy: 1)
         
@@ -105,7 +105,7 @@ extension CSVParser {
       // the last element
       if cursor != inputContents.endIndex && nextDelimiter == nil && nextLine == nil {
         row.append(self.content.substring(with: cursor..<self.content.endIndex))
-        self.rows.append(row)
+        self._rows.append(row)
         row.removeAll(keepingCapacity: true)
         cursor = self.content.endIndex
         
