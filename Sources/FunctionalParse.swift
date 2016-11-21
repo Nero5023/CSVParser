@@ -123,7 +123,7 @@ extension CSVParser {
     while true {
       switch res {
       case let .done(rows):
-        self.rows = rows
+        self._rows = rows
         return
       case let .call(f):
         res = f()
