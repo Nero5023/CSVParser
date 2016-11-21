@@ -14,6 +14,8 @@ public class CSVParser {
       return _rows
     }
   }
+  
+  let hasHeader: Bool
   // config
   let delimiter: Character
   let lineSeparator: Character
@@ -21,7 +23,11 @@ public class CSVParser {
   
   var headers: [String] {
     get {
-      return self._rows.first ?? []
+      if hasHeader {
+        return self.rows.first ?? []
+      }else {
+        return []
+      }
     }
   }
   
@@ -32,12 +38,12 @@ public class CSVParser {
     - delimiter: the delimiter of the csv string
     - lineSeparator: the line separator of the csv string
   */
-  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n") throws {
+  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n", hasHeader: Bool = true) throws {
     self.content = content
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
     self._rows = []
-    
+    self.hasHeader = hasHeader
     try self.parse()
   }
   
@@ -60,11 +66,16 @@ public class CSVParser {
    - delimiter: the delimiter of the csv file
    - lineSeparator: the line separator of the csv file
    */
-  public init(elements: [[String]], delimiter: Character = ",", lineSeparator: Character = "\n") {
+  public init(elements: [[String]], delimiter: Character = ",", lineSeparator: Character = "\n", hasHeader: Bool = true) {
     self.content = ""
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
     self._rows = elements
+    self.hasHeader = hasHeader
+  }
+  
+  public convenience required init() {
+    self.init(elements:[[]])
   }
   
   public func wirite(toFilePath path: String) throws {
@@ -267,5 +278,14 @@ extension CSVParser {
         return $0[index]
       }
     }
+  }
+}
+
+extension CSVParser: RangeReplaceableCollection {
+  public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Array<String> {
+    self._rows.replaceSubrange(subrange, with: newElements)
+  }
+  public func reserveCapacity(_ n: Int) {
+    self._rows.reserveCapacity(n)
   }
 }
