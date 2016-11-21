@@ -74,6 +74,9 @@ public class CSVParser {
     self.hasHeader = hasHeader
   }
   
+  /**
+   Create an empty CSVParser, required by 'RangeReplaceableCollection'
+   */
   public convenience required init() {
     self.init(elements:[[]])
   }
