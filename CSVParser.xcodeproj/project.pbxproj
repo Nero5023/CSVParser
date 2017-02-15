@@ -495,6 +495,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = __PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig /* CSVParser.xcodeproj/Configs/Project.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 			};
 			name = Release;
 		};
@@ -502,6 +504,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = __PBXFileRef_CSVParser.xcodeproj/Configs/Project.xcconfig /* CSVParser.xcodeproj/Configs/Project.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 			};
 			name = Debug;
 		};
@@ -515,6 +519,7 @@
 				CE3B2DD01E542E0F00845C2A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		"___RootConfs_" /* Build configuration list for PBXProject "CSVParser" */ = {
 			isa = XCConfigurationList;
