@@ -7,8 +7,6 @@ A swift library for fast read and write CSV file. This library supports all Appl
 
 ## List to do
 ---
-- [ ] concurrent parse csv
-- [ ] improve performance by uing uft16 view to parse
 - [x] get column by string subscript
 - [x] error
 - [x] initialization from string
