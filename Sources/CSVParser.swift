@@ -1,10 +1,9 @@
 import Foundation
 
-
 public class CSVParser {
   
   var content: String
-  var _rows: [[String]]
+  var _rows:   [[String]]
   
   var rows: [[String]] {
     get {
@@ -15,17 +14,17 @@ public class CSVParser {
     }
   }
   
-  let hasHeader: Bool
+  let hasHeader:     Bool
   // config
-  let delimiter: Character
+  let delimiter:     Character
   let lineSeparator: Character
-  let quotes: Character = "\""
+  let quotes:        Character = "\""
   
   var headers: [String] {
     get {
       if hasHeader {
         return self.rows.first ?? []
-      }else {
+      } else {
         return []
       }
     }
@@ -38,7 +37,12 @@ public class CSVParser {
     - delimiter: the delimiter of the csv string
     - lineSeparator: the line separator of the csv string
   */
-  public init(content: String, delimiter: Character = ",", lineSeparator: Character = "\n", hasHeader: Bool = true) throws {
+  public init(
+      content: String,
+      delimiter: Character = ",",
+      lineSeparator: Character = "\n",
+      hasHeader: Bool = true
+  ) throws {
     self.content = content
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
@@ -66,7 +70,12 @@ public class CSVParser {
    - delimiter: the delimiter of the csv file
    - lineSeparator: the line separator of the csv file
    */
-  public init(elements: [[String]], delimiter: Character = ",", lineSeparator: Character = "\n", hasHeader: Bool = true) {
+  public init(
+      elements: [[String]],
+      delimiter: Character = ",",
+      lineSeparator: Character = "\n",
+      hasHeader: Bool = true
+  ) {
     self.content = ""
     self.delimiter = delimiter
     self.lineSeparator = lineSeparator
@@ -75,16 +84,24 @@ public class CSVParser {
   }
   
   /**
-   Create an empty CSVParser, required by 'RangeReplaceableCollection'
+   Required by 'RangeReplaceableCollection'
    */
+  public convenience required init<S: Sequence>(_ elements: S) where S.Element == [String] {
+    self.init(elements: [[String]](elements))
+  }
+  
+  /**
+  Required by 'RangeReplaceableCollection'
+  */
   public convenience required init() {
-    self.init(elements:[[]])
+    self.init(elements: [])
   }
   
   public func wirite(toFilePath path: String) throws {
-    try self.rows.map{ $0.joined(separator: String(self.delimiter)) }.joined(separator: String(self.lineSeparator)).write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
+    try self.rows.map { $0.joined(separator: String(self.delimiter)) }
+        .joined(separator: String(self.lineSeparator))
+        .write(to: URL(fileURLWithPath: path), atomically: false, encoding: .utf8)
   }
-  
   
   public func enumeratedWithDic() -> [[String: String]] {
     return self.rows.dropFirst().map {
@@ -96,12 +113,11 @@ public class CSVParser {
     }
   }
   
-  
   private func parse() throws {
     if let _ = self.content.range(of: String(self.quotes)) {
       // if the file contains quote '"'
       try self.parseWithQuotes()
-    }else {
+    } else {
       // if the file not contain quote
       self.parserNoQuote()
     }
@@ -111,7 +127,7 @@ public class CSVParser {
     if let _ = self.content.range(of: String(self.quotes)) {
       // if the file contains quote '"'
       self.functionalParseWithQuote()
-    }else {
+    } else {
       // if the file not contain quote
       self.parserNoQuote()
     }
@@ -136,9 +152,9 @@ public class CSVParser {
    - Returns: the parsed json string
    */
   public func toJSON() throws -> String? {
-    let dic = self.enumeratedWithDic()
+    let dic      = self.enumeratedWithDic()
     let jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-    let jsonStr = String(data: jsonData, encoding: String.Encoding.utf8)
+    let jsonStr  = String(data: jsonData, encoding: String.Encoding.utf8)
     return jsonStr
   }
   
@@ -163,19 +179,22 @@ public class CSVParser {
    - Returns: the parsed CSV String
   */
   static public func jsonToCSVString(jsonData: Data) throws -> String {
-    guard let jsonObj = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? Array<Dictionary<String, Any>> else {
+    guard let jsonObj = try JSONSerialization.jsonObject(
+        with: jsonData,
+        options: .allowFragments
+    ) as? Array<Dictionary<String, Any>> else {
       throw CSVParserError.jsonObjTypeNotMatch
     }
-    let delimiter = ","
+    let delimiter     = ","
     let lineSeparator = "\n"
     if jsonObj.count == 0 {
       return ""
     }
     let header = jsonObj[0].keys
-    let headerStr = header.dropFirst().reduce(header.first!) { result, col in
+    let headerStr = header.dropFirst().reduce(header.first!) {
+      result, col in
       result + delimiter + col
     }
-    
     // help method
     // parse dic to a line of csv string
     func dicToStr(dic: [String: Any]) -> String {
@@ -192,23 +211,22 @@ public class CSVParser {
     func parseDicValue(value: Any?) -> String {
       if let value = value as? String {
         return value
-      }else if let intValue = value as? Int {
+      } else if let intValue = value as? Int {
         return String(intValue)
-      }else if let floatValue = value as? Float {
+      } else if let floatValue = value as? Float {
         return String(floatValue)
       }
       return ""
     }
     
-    let csvContent = jsonObj.reduce(headerStr) { (result, row) -> String in
+    let csvContent = jsonObj.reduce(headerStr) {
+      (result, row) -> String in
       result + dicToStr(dic: row)
     }
     return csvContent
   }
   
-  
 }
-
 
 //MARK: Make a CSVParserIterator
 public struct CSVParserIterator: IteratorProtocol {
@@ -221,7 +239,6 @@ public struct CSVParserIterator: IteratorProtocol {
     self.rowsIterator = rows.makeIterator()
   }
   
-  
   public mutating func next() -> [String]? {
     return self.rowsIterator.next()
   }
@@ -230,17 +247,19 @@ public struct CSVParserIterator: IteratorProtocol {
 
 //MARK: Comfirm to Sequence protocol
 extension CSVParser: Sequence {
+  public typealias SubSequence = ArraySlice<[String]>
+  
   public func makeIterator() -> CSVParserIterator {
     return CSVParserIterator(rows: self.rows)
   }
 }
 
-
 //MARK: Comfirm to Collection protocol
 extension CSVParser: Collection {
   public typealias Index = Int
+  public typealias Element = [String]
   public var startIndex: Index { return self.rows.startIndex }
-  public var endIndex: Index {
+  public var endIndex:   Index {
     return self.rows.endIndex
   }
   
@@ -248,19 +267,10 @@ extension CSVParser: Collection {
     return self.rows.index(after: i)
   }
   
-  /**
-   The Int subscript
-   - Returns: the ith row
-  */
-  public subscript(idx: Index) -> [String] {
-    get {
-      return self.rows[idx]
-    }
-    
-    set (newValue) {
-      self._rows[idx] = newValue
-    }
-  }
+  public subscript(position: Index) -> [String] { return self._rows[position] }
+  
+  public subscript(bounds: Range<Int>) -> ArraySlice<[String]> { return self._rows[bounds] }
+  
 }
 
 extension CSVParser {
@@ -277,7 +287,7 @@ extension CSVParser {
       // make sure every column
       if index >= $0.count {
         return ""
-      }else {
+      } else {
         return $0[index]
       }
     }
@@ -285,10 +295,13 @@ extension CSVParser {
 }
 
 extension CSVParser: RangeReplaceableCollection {
-  public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Array<String> {
+  
+  public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, Element == C.Element {
     self._rows.replaceSubrange(subrange, with: newElements)
   }
-  public func reserveCapacity(_ n: Int) {
-    self._rows.reserveCapacity(n)
+  
+  public func append<S>(contentsOf newElements: S) where S: Sequence, CSVParser.Element == S.Element {
+    self._rows.append(contentsOf: newElements)
   }
+  
 }
