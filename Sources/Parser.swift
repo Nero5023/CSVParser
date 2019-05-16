@@ -17,7 +17,7 @@ extension CSVParser {
   }
   
   func parseWithQuotes() throws {
-    let inputContents = content.characters
+    let inputContents = content
 
     var cursor = inputContents.startIndex
     var nextDelimiter = inputContents.index(of: self.delimiter)
@@ -37,7 +37,7 @@ extension CSVParser {
             if nextQuote == inputContents.endIndex
                         || inputContents.index(after: nextQuote) == inputContents.endIndex {
               
-              row.append(self.content.substring(with: cursor..<nextQuote))
+                row.append(String(self.content[cursor..<nextQuote]))
               self._rows.append(row)
               return
             }
@@ -50,7 +50,7 @@ extension CSVParser {
             
             // come across delimiter
             if inputContents[inputContents.index(after: nextQuote)] == self.delimiter {
-              row.append(self.content.substring(with: cursor..<nextQuote))
+                row.append(String(self.content[cursor..<nextQuote]))
               cursor = inputContents.index(nextQuote, offsetBy: 1 + 1)
               // need to be the cursor next index
               
@@ -61,7 +61,7 @@ extension CSVParser {
             
             // come accross nextline
             if inputContents[inputContents.index(after: nextQuote)] == self.lineSeparator {
-              row.append(self.content.substring(with: cursor..<nextQuote))
+                row.append(String(self.content[cursor..<nextQuote]))
               self._rows.append(row)
               row.removeAll(keepingCapacity: true)
               //nextDelimiter = inputContents.suffix(from: cursor).index(of: self.delimiter)
@@ -83,7 +83,7 @@ extension CSVParser {
         if let nextLine = nextLine , nextDelim >= nextLine   {
           //pass
         }else {
-          row.append(self.content.substring(with: cursor..<nextDelim))
+            row.append(String(self.content[cursor..<nextDelim]))
           cursor = inputContents.index(nextDelim, offsetBy: 1)
           nextDelimiter = self.content.index(of: self.delimiter, after: cursor)
           continue
@@ -92,7 +92,7 @@ extension CSVParser {
       
       // end of row
       if let nextNewLine = nextLine {
-        row.append(self.content.substring(with: cursor..<nextNewLine))
+        row.append(String(self.content[cursor..<nextNewLine]))
         self._rows.append(row)
         row.removeAll(keepingCapacity: true)
         cursor = inputContents.index(nextNewLine, offsetBy: 1)
@@ -104,7 +104,7 @@ extension CSVParser {
       
       // the last element
       if cursor != inputContents.endIndex && nextDelimiter == nil && nextLine == nil {
-        row.append(self.content.substring(with: cursor..<self.content.endIndex))
+        row.append(String(self.content[cursor..<self.content.endIndex]))
         self._rows.append(row)
         row.removeAll(keepingCapacity: true)
         cursor = self.content.endIndex
@@ -113,39 +113,6 @@ extension CSVParser {
       
       break
     }
-  
   }
-  
-  
-  //Functional Parse
-//    func concurrencyParse(handler:  @escaping ()->()) {
-//      let wordsInOneTime = 100
-//      let parseGroup = DispatchGroup()
-//      // writeRowQueue is a serial queue not concurrent
-//      let writeRowQueue = DispatchQueue(label: "com.csvparser.write", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-//      writeRowQueue.setTarget(queue: DispatchQueue.global(qos: .default))
-//      for i in 0...self.lines.count / wordsInOneTime {
-//        let workItem = DispatchWorkItem(block: {
-//          let min = wordsInOneTime < (self.lines.count - i*wordsInOneTime) ? wordsInOneTime : (self.lines.count - i*wordsInOneTime)
-//          for j in 0..<min{
-//            let index = i*wordsInOneTime + j
-//  //          self.rows[index] =
-//            let parsedLine = self.lines[index].words()
-//  //          dispatch_barrier_async(<#T##queue: DispatchQueue##DispatchQueue#>, <#T##block: () -> Void##() -> Void#>)
-//            writeRowQueue.async(group: parseGroup, qos: .default, flags: .barrier) {
-//              self.rows[index] = parsedLine
-//            }
-//          }
-//        })
-//        DispatchQueue.global(qos: .userInitiated).async(group: parseGroup, execute: workItem)
-//  
-//      }
-//  //    parseGroup.notify(queue: DispatchQueue.main, execute: handler)
-//      parseGroup.wait()
-//      handler()
-//    }
-  
-  
-  
 }
 

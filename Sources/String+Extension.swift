@@ -24,7 +24,7 @@ extension String {
       }else {
         return characterSet.contains(UnicodeScalar(x)!)
       }
-      }.flatMap(String.init)
+      }.compactMap(String.init)
     return result
   }
   
@@ -39,7 +39,7 @@ extension String {
       }else {
         return Character(UnicodeScalar(x)!) == character
       }
-      }.flatMap(String.init)
+      }.compactMap(String.init)
     return result
   }
   
@@ -69,7 +69,7 @@ extension String {
         }else {
           return char == delimiter
         }
-        }.flatMap(String.init)
+        }.compactMap(String.init)
     }
   }
   
@@ -80,14 +80,14 @@ extension String {
   func nzSplitLines(lineSeparator: Character) -> [String] {
     return self.utf16.split {
       Character(UnicodeScalar($0)!) == lineSeparator
-      }.flatMap(String.init)
+      }.compactMap(String.init)
   }
   
   // to split to elements
   func nzSplitElements(delimiter: Character) -> [String] {
     return self.utf16.split {
       return Character(UnicodeScalar($0)!) == delimiter
-      }.flatMap(String.init)
+      }.compactMap(String.init)
   }
   
   // from string to object data
@@ -98,7 +98,7 @@ extension String {
     return rowString.map {
       $0.split(maxSplits: Int.max, omittingEmptySubsequences: false) {
         Character(UnicodeScalar($0)!) == delimiter
-        }.flatMap(String.init)
+        }.compactMap(String.init)
     }
   }
   
