@@ -106,17 +106,7 @@ public class CSVParser {
       self.parserNoQuote()
     }
   }
-  
-  private func functionalParse() {
-    if let _ = self.content.range(of: String(self.quotes)) {
-      // if the file contains quote '"'
-      self.functionalParseWithQuote()
-    }else {
-      // if the file not contain quote
-      self.parserNoQuote()
-    }
-  }
-  
+    
   // MARK: CSV To JSON
   /**
    Convert csv to JSON

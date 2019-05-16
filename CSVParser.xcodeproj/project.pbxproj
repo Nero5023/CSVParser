@@ -12,7 +12,6 @@
 		_LinkFileRef_CSVParser_via_CSVParserTests /* CSVParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_CSVParser" /* CSVParser.framework */; };
 		__src_cc_ref_Sources/CSVParser.swift /* CSVParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/CSVParser.swift /* CSVParser.swift */; };
 		__src_cc_ref_Sources/Errors.swift /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/Errors.swift /* Errors.swift */; };
-		__src_cc_ref_Sources/FunctionalParse.swift /* FunctionalParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/FunctionalParse.swift /* FunctionalParse.swift */; };
 		__src_cc_ref_Sources/Parser.swift /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/Parser.swift /* Parser.swift */; };
 		"__src_cc_ref_Sources/String+Extension.swift" /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Sources/String+Extension.swift" /* String+Extension.swift */; };
 		__src_cc_ref_Tests/CSVParserTests/CSVParserTests.swift /* CSVParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/CSVParserTests/CSVParserTests.swift /* CSVParserTests.swift */; };
@@ -37,12 +36,11 @@
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/CSVParser.swift /* CSVParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParser.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/Errors.swift /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/FunctionalParse.swift /* FunctionalParse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionalParse.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/Parser.swift /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		"__PBXFileRef_Sources/String+Extension.swift" /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/CSVParserTests/CSVParserTests.swift /* CSVParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVParserTests.swift; sourceTree = "<group>"; };
 		"_____Product_CSVParser" /* CSVParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CSVParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_CSVParserTests" /* CSVParserTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = CSVParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"_____Product_CSVParserTests" /* CSVParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = CSVParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,7 +129,6 @@
 			children = (
 				__PBXFileRef_Sources/CSVParser.swift /* CSVParser.swift */,
 				__PBXFileRef_Sources/Errors.swift /* Errors.swift */,
-				__PBXFileRef_Sources/FunctionalParse.swift /* FunctionalParse.swift */,
 				__PBXFileRef_Sources/Parser.swift /* Parser.swift */,
 				"__PBXFileRef_Sources/String+Extension.swift" /* String+Extension.swift */,
 			);
@@ -235,6 +232,12 @@
 						DevelopmentTeam = WLUW25LQLS;
 						ProvisioningStyle = Automatic;
 					};
+					"______Target_CSVParser" = {
+						LastSwiftMigration = 1010;
+					};
+					"______Target_CSVParserTests" = {
+						LastSwiftMigration = 1010;
+					};
 				};
 			};
 			buildConfigurationList = "___RootConfs_" /* Build configuration list for PBXProject "CSVParser" */;
@@ -280,7 +283,6 @@
 			files = (
 				__src_cc_ref_Sources/CSVParser.swift /* CSVParser.swift in Sources */,
 				__src_cc_ref_Sources/Errors.swift /* Errors.swift in Sources */,
-				__src_cc_ref_Sources/FunctionalParse.swift /* FunctionalParse.swift in Sources */,
 				__src_cc_ref_Sources/Parser.swift /* Parser.swift in Sources */,
 				"__src_cc_ref_Sources/String+Extension.swift" /* String+Extension.swift in Sources */,
 			);
@@ -443,7 +445,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = CSVParser;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -456,7 +459,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -473,7 +477,8 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -487,7 +492,8 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
