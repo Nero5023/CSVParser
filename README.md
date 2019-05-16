@@ -7,8 +7,6 @@ A swift library for fast read and write CSV file. This library supports all Appl
 
 ## List to do
 ---
-- [ ] concurrent parse csv
-- [ ] improve performance by uing uft16 view to parse
 - [x] get column by string subscript
 - [x] error
 - [x] initialization from string
@@ -50,7 +48,7 @@ $ swift build
 To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Nero5023/CSVParser" ~> 1.1.4
+github "Nero5023/CSVParser" ~> 1.1.5
 ```
 
 Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.

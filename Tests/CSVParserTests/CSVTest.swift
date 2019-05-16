@@ -14,20 +14,15 @@ class CSVTests:XCTestCase{
         let testone = try!CSVParser(
             content: "id,\"name\",age,job\n1,name1,20,job1\n2,name2,20,job2"
         )
-//        for i in testone{
-//            print(i)
-//        }
         XCTAssertTrue(testone[0]==["id","name","age","job"])
         XCTAssertTrue(testone[1]==["1","name1","20","job1"])
         XCTAssertTrue(testone[2]==["2","name2","20","job2"])
     }
+    
     func testQuotes(){
         let testone = try!CSVParser(
             content: "id,\"name, first\",\"name,last\"\n4,\"Alex\",Smith\n5,Joe,Bloggs\n9,\"Person, with a \"\"quote\"\" in their name\",uugh\n10,\"Person, with escaped comma\",Jones\n10,Person with a backslash,Jones\n12,\"Newlines\nare the best\",Woo hoo"
         )
-//        for i in testone{
-//            print(i)
-//        }
         XCTAssertTrue(testone[0]==["id", "name, first", "name,last"])
         XCTAssertTrue(testone[1]==["4", "Alex", "Smith"])
         XCTAssertTrue(testone[2]==["5", "Joe", "Bloggs"])
@@ -36,6 +31,7 @@ class CSVTests:XCTestCase{
         XCTAssertTrue(testone[5]==["10", "Person with a backslash", "Jones"])
         XCTAssertTrue(testone[6]==["12", "Newlines\nare the best", "Woo hoo"])
     }
+    
     func testEmptyFileds(){
         let testone = try!CSVParser(
             content: "\"id\",name,age\n1,John,23\n2,James,32\n3,,\n6\n\n,Tom"
@@ -56,18 +52,30 @@ class CSVTests:XCTestCase{
         let testone = try!CSVParser(
             content: "id,\"name\",age,job\n1,name1,20,job1\n2,name2,20,job2"
         )
-//        print(try!testone.toJSON()!)
-        XCTAssertTrue((try!testone.toJSON()!)=="[\n  {\n    \"name\" : \"name1\",\n    \"age\" : \"20\",\n    \"id\" : \"1\",\n    \"job\" : \"job1\"\n  },\n  {\n    \"name\" : \"name2\",\n    \"age\" : \"20\",\n    \"id\" : \"2\",\n    \"job\" : \"job2\"\n  }\n]")
+        let targetRes = CSVTests.toJsonDic(jsonStr: "[\n  {\n    \"name\" : \"name1\",\n    \"id\" : \"1\",\n    \"age\" : \"20\",\n    \"job\" : \"job1\"\n  },\n  {\n    \"name\" : \"name2\",\n    \"id\" : \"2\",\n    \"age\" : \"20\",\n    \"job\" : \"job2\"\n  }\n]")
+        XCTAssertTrue((CSVTests.toJsonDic(jsonStr: try!testone.toJSON()!))==targetRes)
         
     }
     
     func testJSONToCSV(){
+        let jsonStr = "[\n  {\n    \"name\" : \"name1\",\n    \"age\" : \"20\",\n    \"id\" : \"1\",\n    \"job\" : \"job1\"\n  },\n  {\n    \"name\" : \"name2\",\n    \"age\" : \"20\",\n    \"id\" : \"2\",\n    \"job\" : \"job2\"\n  }\n]"
         let testone = try!CSVParser.jsonToCSVString(
-            jsonData: "[\n  {\n    \"name\" : \"name1\",\n    \"age\" : \"20\",\n    \"id\" : \"1\",\n    \"job\" : \"job1\"\n  },\n  {\n    \"name\" : \"name2\",\n    \"age\" : \"20\",\n    \"id\" : \"2\",\n    \"job\" : \"job2\"\n  }\n]".data(using: .utf8 )!
+            jsonData: jsonStr.data(using: .utf8 )!
         )
-//        print(testone as String?)
-        XCTAssertTrue(testone=="age,name,id,job\n20,name1,1,job1\n20,name2,2,job2")
+        let res = try!CSVParser(content: testone)
+        XCTAssertTrue((CSVTests.toJsonDic(jsonStr: try!res.toJSON()!))==CSVTests.toJsonDic(jsonStr:jsonStr))
         
     }
     
+    // Help function
+    class func toJsonDic(jsonStr: String) -> [String:String]? {
+        if let data = jsonStr.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
 }
