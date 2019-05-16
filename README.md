@@ -47,9 +47,8 @@ $ swift build
 
 To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
 
-```ogdl
+
 github "Nero5023/CSVParser" ~> 2.0.0
-```
 
 Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.
 
