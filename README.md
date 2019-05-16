@@ -12,11 +12,11 @@ A swift library for fast read and write CSV file. This library supports all Appl
 - [x] initialization from string
 - [x] Convert JSON To CSV
 - [x] Convert CSV To JSON
-
+- [] Concurrent parse
 ## Requirements
 ---
 
-* Swift 3.0+
+* Swift 4.0+
 
 ## Installation
 ---
@@ -48,7 +48,7 @@ $ swift build
 To integrate CSVParser into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "Nero5023/CSVParser" ~> 1.1.5
+github "Nero5023/CSVParser" ~> 2.0.0
 ```
 
 Run `carthage update` to build the framework and drag the built `CSVParser.framework` into your Xcode project.
