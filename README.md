@@ -1,7 +1,6 @@
 # CSVParser
 A swift library for fast read and write CSV file. This library supports all Apple platform and **Linux**.
 
-[![Build Status](https://travis-ci.org/Nero5023/CSVParser.svg?branch=master)](https://travis-ci.org/Nero5023/CSVParser)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Plafrom](https://img.shields.io/badge/platform-linux%20%7C%20ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos%20-lightgray.svg)](https://github.com/Nero5023/CSVParser)
 
